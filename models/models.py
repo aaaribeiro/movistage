@@ -9,6 +9,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.orm import backref
 from sqlalchemy.sql.expression import null
 from sqlalchemy.sql.sqltypes import Boolean
+from routers import webhooks
 from sqlalchemy_utils import EmailType, PasswordType
 # from sqlalchemy.sql.sqltypes import Boolean
 
@@ -59,7 +60,9 @@ class WebhookLogs(Base):
 
     __tablename__ = "webhook_log"
 
-    ticket_id = Column(Integer, primary_key=True, nullable=False)
+    hook_id = Column(Integer, primary_key=True, nullable=False,
+        autoincrement=True)
+    ticket_id = Column(Integer, nullable=False)
     change = Column(String, nullable=False)
     trigger_date = Column(DateTime, nullable=False)
     # is_changed = Column(Boolean, nullable=False)

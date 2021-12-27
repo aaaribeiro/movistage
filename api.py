@@ -43,6 +43,10 @@ def startup_event():
 #     return {"hello": "world"}
 
 
+# @app.get("/")
+# def get_root():
+#     return {"message": "welcome to Stage"}
+
 app.include_router(tickets.router, prefix=PREFIX)
 app.include_router(organizations.router, prefix=PREFIX)
 app.include_router(time_appointments.router, prefix=PREFIX)
