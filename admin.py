@@ -14,8 +14,8 @@ def check_email(email):
     regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'  
     if not (re.search(regex, email)):   
         click.echo("Invalid Email")
-        exit() 
-
+        exit()
+        
 
 @click.group()
 def main():
