@@ -45,7 +45,7 @@ class WebhookLog(BaseModel):
     ticket_id: Optional[int]
     change: Optional[str]
     trigger_date: Optional[datetime]
-    # is_changed = Optional[bool]
+    was_read: Optional[bool]
 
     class Config:
         orm_mode = True
@@ -55,7 +55,7 @@ class User(BaseModel):
     user_id: Optional[int]
     name: Optional[str]
     email: Optional[str]
-    # isadmin: Optional[bool]
+    isadmin: Optional[bool]
     password: Optional[str]
 
     class Config:

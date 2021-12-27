@@ -65,7 +65,7 @@ class WebhookLogs(Base):
     ticket_id = Column(Integer, nullable=False)
     change = Column(String, nullable=False)
     trigger_date = Column(DateTime, nullable=False)
-    # is_changed = Column(Boolean, nullable=False)
+    was_read = Column(Boolean, nullable=False, default=False)
 
 
 class Users(Base):

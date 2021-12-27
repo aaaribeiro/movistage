@@ -149,6 +149,13 @@ def get_hook_logs(db: Session, skip: int = 0, limit: int = 100):
         skip).limit(limit).all()
 
 
+def get_hooks_by_ticket_id(db: Session, ticket_id: int, skip: int = 0,
+    limit: int = 100):
+    return db.query(models.WebhookLogs).\
+        filter(models.WebhookLogs.ticket_id==ticket_id).\
+        offset(skip).limit(limit).all()
+
+
 def get_hook_log_by_ticket_id(db: Session, ticket_id: int):
     return db.query(models.WebhookLogs).filter(
         models.WebhookLogs.ticket_id==ticket_id).first()
@@ -228,3 +235,21 @@ def get_user_by_token(db: Session, token: str):
 def get_token_by_user_id(db: Session, id: int):
     return db.query(models.AccessToken).filter(
         models.AccessToken.user_id == id).first()
+
+
+def get_hook_by_id(db: Session, id: int):
+    return db.query(models.WebhookLogs).filter(
+        models.WebhookLogs.hook_id==id).first()
+
+
+def partial_update_hook(db: Session, id: str, 
+                        hook: schemas.WebhookLog):
+    db.query(models.WebhookLogs).filter(
+        models.WebhookLogs.hook_id==id).update(
+        hook.dict(exclude_unset=True))        
+    db.commit()
+    db_hook_updated = get_hook_by_id(
+        db,
+        id=id
+    )
+    return db_hook_updated
