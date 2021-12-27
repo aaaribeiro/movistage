@@ -219,10 +219,10 @@ def get_user_by_token(db: Session, token: str):
         models.AccessToken.access_token==token).first()
 
 
-def delete_token(db: Session, token_model: models.AccessToken):
-    db.delete(token_model)
-    db.commit()
-    return True
+# def delete_token(db: Session, token_model: models.AccessToken):
+#     db.delete(token_model)
+#     db.commit()
+#     return True
 
 
 def get_token_by_user_id(db: Session, id: int):

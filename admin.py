@@ -15,7 +15,7 @@ def check_email(email):
     if not (re.search(regex, email)):   
         click.echo("Invalid Email")
         exit()
-        
+
 
 @click.group()
 def main():
@@ -121,9 +121,9 @@ def update_password(email):
                 exit()
             else: # if match update password
                 db_token = crud.get_token_by_user_id(db, db_user.user_id)
-                if db_token: # if token for this user exists, delete it
-                    crud.delete_token(db, db_token)
-                    click.echo("-> Token deleted, a new one has to be created")
+                # if db_token: # if token for this user exists, delete it
+                    # crud.delete_token(db, db_token)
+                    # click.echo("-> Token deleted, a new one has to be created")
                 db_user.password = password 
                 db.commit()            
                 click.echo("Password changed")
