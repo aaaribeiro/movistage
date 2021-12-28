@@ -19,7 +19,7 @@ from auth import auth
 
 # constants
 # it will be used in swagger documentation to organize the endpoints
-TAGS = ["Webhook",]
+TAGS = ["Hooks",]
 
 router = APIRouter()
 
@@ -184,6 +184,24 @@ async def create_hook_for_subject(request: Request, token: str = None,
 
 
 @router.get(
+    "/hooks",
+    tags=TAGS,
+    response_model=List[schemas.WebhookLog]
+)
+async def read_hooks(token: str = None, read: bool = None,
+                        skip: int = 0, limit: int = 100,
+                        db:Session=Depends(get_db)):
+
+    """
+    Returns a hook list by ticket id
+    """
+
+    auth.authorization(db, token)    
+    hooks = crud.get_hook_logs(db, read=read, skip=skip, limit=limit)
+    return hooks
+
+
+@router.get(
     "/hook/{ticket_id}",
     tags=TAGS,
     response_model=List[schemas.WebhookLog]
@@ -197,9 +215,9 @@ async def read_hooks_by_ticket_id(ticket_id: int, token: str = None,
     """
 
     auth.authorization(db, token)    
-    tickets = crud.get_hooks_by_ticket_id(db, ticket_id=ticket_id, skip=skip,
+    hooks = crud.get_hooks_by_ticket_id(db, ticket_id=ticket_id, skip=skip,
         limit=limit)
-    return tickets
+    return hooks
 
 
 @router.patch(

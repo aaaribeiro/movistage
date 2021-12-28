@@ -144,9 +144,15 @@ def create_time_appointment(db: Session,
 
 ### WEBHOOK ###
 
-def get_hook_logs(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.WebhookLogs).offset(
-        skip).limit(limit).all()
+def get_hook_logs(db: Session, read: bool = None,
+                    skip: int = 0, limit: int = 100):
+    if read is not None:
+        return db.query(models.WebhookLogs).\
+            filter(models.WebhookLogs.was_read==read).\
+            offset(skip).limit(limit).all()
+    else:
+        return db.query(models.WebhookLogs).\
+            offset(skip).limit(limit).all()
 
 
 def get_hooks_by_ticket_id(db: Session, ticket_id: int, skip: int = 0,
