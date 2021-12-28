@@ -198,6 +198,8 @@ async def read_hooks(token: str = None, read: bool = None,
 
     auth.authorization(db, token)    
     hooks = crud.get_hook_logs(db, read=read, skip=skip, limit=limit)
+    if not hooks:
+        raise HTTPException(status_code=400, detail="All hooks were read")
     return hooks
 
 

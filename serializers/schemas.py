@@ -42,6 +42,7 @@ class TimeAppointment(BaseModel):
 
 
 class WebhookLog(BaseModel):
+    hook_id: Optional[int]
     ticket_id: Optional[int]
     change: Optional[str]
     trigger_date: Optional[datetime]
