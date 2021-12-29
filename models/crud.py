@@ -59,7 +59,7 @@ def partial_update_ticket(db: Session, id: str,
     return db_ticket_updated
 
 
-def delete_ticket(db: Session, id: str):
+def delete_ticket(db: Session, id: int):
     db_ticket = get_ticket_by_id(db, id)
     db.delete(db_ticket)
     db.commit()

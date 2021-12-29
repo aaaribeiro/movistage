@@ -189,7 +189,7 @@ async def create_hook_for_subject(request: Request, token: str = None,
     response_model=List[schemas.WebhookLog]
 )
 async def read_hooks(token: str = None, read: bool = None,
-                        skip: int = 0, limit: int = 100,
+                        skip: int = 0, limit: int = 1000,
                         db:Session=Depends(get_db)):
 
     """
