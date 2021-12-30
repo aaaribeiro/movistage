@@ -149,8 +149,9 @@ def get_hook_logs(db: Session, read: bool = None,
     if read is not None:
         return db.query(models.WebhookLogs).\
             filter(models.WebhookLogs.was_read==read).\
-            offset(skip).limit(limit).all().\
-            order_by(models.WebhookLogs.hook_id)
+            order_by(models.WebhookLogs.hook_id).\
+            offset(skip).limit(limit).all()
+            
     else:
         return db.query(models.WebhookLogs).\
             offset(skip).limit(limit).all()
