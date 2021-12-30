@@ -149,7 +149,8 @@ def get_hook_logs(db: Session, read: bool = None,
     if read is not None:
         return db.query(models.WebhookLogs).\
             filter(models.WebhookLogs.was_read==read).\
-            offset(skip).limit(limit).all()
+            offset(skip).limit(limit).all().\
+            order_by(models.WebhookLogs.hook_id)
     else:
         return db.query(models.WebhookLogs).\
             offset(skip).limit(limit).all()
@@ -228,7 +229,8 @@ def authenticate_user(db: Session, user: str, password: str):
 def get_user_by_token(db: Session, token: str):
     return db.query(models.AccessToken.access_token,
                     models.Users.email,
-                    models.Users.isadmin).filter(
+                    models.Users.isadmin).\
+            join(models.Users).filter(
         models.AccessToken.access_token==token).first()
 
 
