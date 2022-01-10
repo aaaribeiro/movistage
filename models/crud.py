@@ -131,7 +131,7 @@ def get_time_appointment_max_id(db: Session):
 def create_time_appointment(db: Session,
                             time_appointment: schemas.TimeAppointment):
     db_time_appointment = models.TimeAppointments(
-        ticket_time_appointment_pk = get_time_appointment_max_id(db)[0] + 1,
+        # ticket_time_appointment_pk = get_time_appointment_max_id(db)[0] + 1,
         ticket_id = time_appointment.ticket_id,
         time_appointment = time_appointment.time_appointment,
         agent = time_appointment.agent

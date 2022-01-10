@@ -23,11 +23,11 @@ class Tickets(Base):
     client_id = Column(String,  ForeignKey("organization.client_id"), nullable=False)
     created_date = Column(DateTime, nullable=False)
     status = Column(String, nullable=False)
-    owner_team = Column(String, nullable=False)
+    owner_team = Column(String)
     category = Column(String, nullable=False)
     urgency = Column(String, nullable=False)
     subject =  Column(String, nullable=False)
-    agent = Column(String, nullable=False)
+    agent = Column(String)
     sla_solution_date = Column(DateTime)
     sla_first_response = Column(DateTime)
 

@@ -23,25 +23,6 @@ TAGS = ["Hooks",]
 
 router = APIRouter()
 
-# @router.post(
-#     "/hook/status",
-#     tags=TAGS,
-#     response_model=schemas.WebhookLog
-# )
-# async def create_hook_for_status(request: Request, token: str = None,
-#                     db: Session=Depends(get_db)):
-
-#     auth.authorization(db, token) 
-#     response = await request.json()
-#     webhook = schemas.WebhookLog(
-#         ticket_id = response["Id"],
-#         change = "STATUS",
-#         trigger_date = datetime.now(),
-#         was_read = False
-#     )
-#     webhook = crud.create_hook(db, webhook)
-#     return webhook
-
 
 @router.post(
     "/hook/new/ticket",
@@ -104,105 +85,6 @@ async def create_hook_for_appointment(request: Request, token: str = None,
     return webhook
 
 
-# @router.post(
-#     "/hook/service",
-#     tags=TAGS,
-#     response_model=schemas.WebhookLog
-# )
-# async def create_hook_for_service(request: Request, token: str = None,
-#                     db: Session=Depends(get_db)):
-
-#     auth.authorization(db, token) 
-#     response = await request.json()
-#     webhook = schemas.WebhookLog(
-#         ticket_id = response["Id"],
-#         change = "SERVICE",
-#         trigger_date = datetime.now(),
-#         was_read = False
-#     )
-#     webhook = crud.create_hook(db, webhook)
-#     return webhook
-
-
-# @router.post(
-#     "/hook/urgency",
-#     tags=TAGS,
-#     response_model=schemas.WebhookLog
-# )
-# async def create_hook_for_urgency(request: Request, token: str = None,
-#                     db: Session=Depends(get_db)):
-
-#     auth.authorization(db, token) 
-#     response = await request.json()
-#     webhook = schemas.WebhookLog(
-#         ticket_id = response["Id"],
-#         change = "URGENCY",
-#         trigger_date = datetime.now(),
-#         was_read = False
-#     )
-#     webhook = crud.create_hook(db, webhook)
-#     return webhook
-
-
-# @router.post(
-#     "/hook/category",
-#     tags=TAGS,
-#     response_model=schemas.WebhookLog
-# )
-# async def create_hook_for_category(request: Request, token: str = None,
-#                     db: Session=Depends(get_db)):
-
-#     auth.authorization(db, token) 
-#     response = await request.json()
-#     webhook = schemas.WebhookLog(
-#         ticket_id = response["Id"],
-#         change = "CATEGORY",
-#         trigger_date = datetime.now(),
-#         was_read = False
-#     )
-#     webhook = crud.create_hook(db, webhook)
-#     return webhook
-
-
-# @router.post(
-#     "/hook/agent",
-#     tags=TAGS,
-#     response_model=schemas.WebhookLog
-# )
-# async def create_hook_for_agent(request: Request, token: str = None,
-#                     db: Session=Depends(get_db)):
-
-#     auth.authorization(db, token) 
-#     response = await request.json()
-#     webhook = schemas.WebhookLog(
-#         ticket_id = response["Id"],
-#         change = "AGENT",
-#         trigger_date = datetime.now(),
-#         was_read = False
-#     )
-#     webhook = crud.create_hook(db, webhook)
-#     return webhook
-
-
-# @router.post(
-#     "/hook/subject",
-#     tags=TAGS,
-#     response_model=schemas.WebhookLog
-# )
-# async def create_hook_for_subject(request: Request, token: str = None,
-#                     db: Session=Depends(get_db)):
-
-#     auth.authorization(db, token) 
-#     response = await request.json()
-#     webhook = schemas.WebhookLog(
-#         ticket_id = response["Id"],
-#         change = "SUBJECT",
-#         trigger_date = datetime.now(),
-#         was_read = False
-#     )
-#     webhook = crud.create_hook(db, webhook)
-#     return webhook
-
 
 @router.get(
     "/hooks",
@@ -224,6 +106,7 @@ async def read_hooks(token: str = None, read: bool = None,
     return hooks
 
 
+
 @router.get(
     "/hook/{ticket_id}",
     tags=TAGS,
@@ -241,6 +124,7 @@ async def read_hooks_by_ticket_id(ticket_id: int, token: str = None,
     hooks = crud.get_hooks_by_ticket_id(db, ticket_id=ticket_id, skip=skip,
         limit=limit)
     return hooks
+
 
 
 @router.patch(
