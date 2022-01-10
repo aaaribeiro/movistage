@@ -44,18 +44,18 @@ router = APIRouter()
 
 
 @router.post(
-    "/hook/ticket",
+    "/hook/new/ticket",
     tags=TAGS,
     response_model=schemas.WebhookLog
 )
-async def create_hook_for_ticket(request: Request, token: str = None,
+async def create_hook_for_new_ticket(request: Request, token: str = None,
                     db: Session=Depends(get_db)):
 
     auth.authorization(db, token)
     response = await request.json()
     webhook = schemas.WebhookLog(
         ticket_id = response["Id"],
-        change = "TICKET",
+        change = "NEW TICKET",
         trigger_date = datetime.now(),
         was_read = False
     )
@@ -64,7 +64,28 @@ async def create_hook_for_ticket(request: Request, token: str = None,
 
 
 @router.post(
-    "/hook/appointment",
+    "/hook/update/ticket",
+    tags=TAGS,
+    response_model=schemas.WebhookLog
+)
+async def create_hook_for_update_ticket(request: Request, token: str = None,
+                    db: Session=Depends(get_db)):
+
+    auth.authorization(db, token)
+    response = await request.json()
+    webhook = schemas.WebhookLog(
+        ticket_id = response["Id"],
+        change = "UPDATE TICKET",
+        trigger_date = datetime.now(),
+        was_read = False
+    )
+    webhook = crud.create_hook(db, webhook)
+    return webhook
+
+
+
+@router.post(
+    "/hook/new/appointment",
     tags=TAGS,
     response_model=schemas.WebhookLog
 )
@@ -75,7 +96,7 @@ async def create_hook_for_appointment(request: Request, token: str = None,
     response = await request.json()
     webhook = schemas.WebhookLog(
         ticket_id = response["Id"],
-        change = "APPOINTMENT",
+        change = "NEW APPOINTMENT",
         trigger_date = datetime.now(),
         was_read = False
     )
