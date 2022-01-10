@@ -23,24 +23,24 @@ TAGS = ["Hooks",]
 
 router = APIRouter()
 
-@router.post(
-    "/hook/status",
-    tags=TAGS,
-    response_model=schemas.WebhookLog
-)
-async def create_hook_for_status(request: Request, token: str = None,
-                    db: Session=Depends(get_db)):
+# @router.post(
+#     "/hook/status",
+#     tags=TAGS,
+#     response_model=schemas.WebhookLog
+# )
+# async def create_hook_for_status(request: Request, token: str = None,
+#                     db: Session=Depends(get_db)):
 
-    auth.authorization(db, token) 
-    response = await request.json()
-    webhook = schemas.WebhookLog(
-        ticket_id = response["Id"],
-        change = "STATUS",
-        trigger_date = datetime.now(),
-        was_read = False
-    )
-    webhook = crud.create_hook(db, webhook)
-    return webhook
+#     auth.authorization(db, token) 
+#     response = await request.json()
+#     webhook = schemas.WebhookLog(
+#         ticket_id = response["Id"],
+#         change = "STATUS",
+#         trigger_date = datetime.now(),
+#         was_read = False
+#     )
+#     webhook = crud.create_hook(db, webhook)
+#     return webhook
 
 
 @router.post(
@@ -83,104 +83,104 @@ async def create_hook_for_appointment(request: Request, token: str = None,
     return webhook
 
 
-@router.post(
-    "/hook/service",
-    tags=TAGS,
-    response_model=schemas.WebhookLog
-)
-async def create_hook_for_service(request: Request, token: str = None,
-                    db: Session=Depends(get_db)):
+# @router.post(
+#     "/hook/service",
+#     tags=TAGS,
+#     response_model=schemas.WebhookLog
+# )
+# async def create_hook_for_service(request: Request, token: str = None,
+#                     db: Session=Depends(get_db)):
 
-    auth.authorization(db, token) 
-    response = await request.json()
-    webhook = schemas.WebhookLog(
-        ticket_id = response["Id"],
-        change = "SERVICE",
-        trigger_date = datetime.now(),
-        was_read = False
-    )
-    webhook = crud.create_hook(db, webhook)
-    return webhook
-
-
-@router.post(
-    "/hook/urgency",
-    tags=TAGS,
-    response_model=schemas.WebhookLog
-)
-async def create_hook_for_urgency(request: Request, token: str = None,
-                    db: Session=Depends(get_db)):
-
-    auth.authorization(db, token) 
-    response = await request.json()
-    webhook = schemas.WebhookLog(
-        ticket_id = response["Id"],
-        change = "URGENCY",
-        trigger_date = datetime.now(),
-        was_read = False
-    )
-    webhook = crud.create_hook(db, webhook)
-    return webhook
+#     auth.authorization(db, token) 
+#     response = await request.json()
+#     webhook = schemas.WebhookLog(
+#         ticket_id = response["Id"],
+#         change = "SERVICE",
+#         trigger_date = datetime.now(),
+#         was_read = False
+#     )
+#     webhook = crud.create_hook(db, webhook)
+#     return webhook
 
 
-@router.post(
-    "/hook/category",
-    tags=TAGS,
-    response_model=schemas.WebhookLog
-)
-async def create_hook_for_category(request: Request, token: str = None,
-                    db: Session=Depends(get_db)):
+# @router.post(
+#     "/hook/urgency",
+#     tags=TAGS,
+#     response_model=schemas.WebhookLog
+# )
+# async def create_hook_for_urgency(request: Request, token: str = None,
+#                     db: Session=Depends(get_db)):
 
-    auth.authorization(db, token) 
-    response = await request.json()
-    webhook = schemas.WebhookLog(
-        ticket_id = response["Id"],
-        change = "CATEGORY",
-        trigger_date = datetime.now(),
-        was_read = False
-    )
-    webhook = crud.create_hook(db, webhook)
-    return webhook
-
-
-@router.post(
-    "/hook/agent",
-    tags=TAGS,
-    response_model=schemas.WebhookLog
-)
-async def create_hook_for_agent(request: Request, token: str = None,
-                    db: Session=Depends(get_db)):
-
-    auth.authorization(db, token) 
-    response = await request.json()
-    webhook = schemas.WebhookLog(
-        ticket_id = response["Id"],
-        change = "AGENT",
-        trigger_date = datetime.now(),
-        was_read = False
-    )
-    webhook = crud.create_hook(db, webhook)
-    return webhook
+#     auth.authorization(db, token) 
+#     response = await request.json()
+#     webhook = schemas.WebhookLog(
+#         ticket_id = response["Id"],
+#         change = "URGENCY",
+#         trigger_date = datetime.now(),
+#         was_read = False
+#     )
+#     webhook = crud.create_hook(db, webhook)
+#     return webhook
 
 
-@router.post(
-    "/hook/subject",
-    tags=TAGS,
-    response_model=schemas.WebhookLog
-)
-async def create_hook_for_subject(request: Request, token: str = None,
-                    db: Session=Depends(get_db)):
+# @router.post(
+#     "/hook/category",
+#     tags=TAGS,
+#     response_model=schemas.WebhookLog
+# )
+# async def create_hook_for_category(request: Request, token: str = None,
+#                     db: Session=Depends(get_db)):
 
-    auth.authorization(db, token) 
-    response = await request.json()
-    webhook = schemas.WebhookLog(
-        ticket_id = response["Id"],
-        change = "SUBJECT",
-        trigger_date = datetime.now(),
-        was_read = False
-    )
-    webhook = crud.create_hook(db, webhook)
-    return webhook
+#     auth.authorization(db, token) 
+#     response = await request.json()
+#     webhook = schemas.WebhookLog(
+#         ticket_id = response["Id"],
+#         change = "CATEGORY",
+#         trigger_date = datetime.now(),
+#         was_read = False
+#     )
+#     webhook = crud.create_hook(db, webhook)
+#     return webhook
+
+
+# @router.post(
+#     "/hook/agent",
+#     tags=TAGS,
+#     response_model=schemas.WebhookLog
+# )
+# async def create_hook_for_agent(request: Request, token: str = None,
+#                     db: Session=Depends(get_db)):
+
+#     auth.authorization(db, token) 
+#     response = await request.json()
+#     webhook = schemas.WebhookLog(
+#         ticket_id = response["Id"],
+#         change = "AGENT",
+#         trigger_date = datetime.now(),
+#         was_read = False
+#     )
+#     webhook = crud.create_hook(db, webhook)
+#     return webhook
+
+
+# @router.post(
+#     "/hook/subject",
+#     tags=TAGS,
+#     response_model=schemas.WebhookLog
+# )
+# async def create_hook_for_subject(request: Request, token: str = None,
+#                     db: Session=Depends(get_db)):
+
+#     auth.authorization(db, token) 
+#     response = await request.json()
+#     webhook = schemas.WebhookLog(
+#         ticket_id = response["Id"],
+#         change = "SUBJECT",
+#         trigger_date = datetime.now(),
+#         was_read = False
+#     )
+#     webhook = crud.create_hook(db, webhook)
+#     return webhook
 
 
 @router.get(
