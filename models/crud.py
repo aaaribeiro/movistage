@@ -16,8 +16,7 @@ from serializers import schemas
 ### TICKETS ###
 
 def get_tickets(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Tickets, models.Organizations).\
-        join(models.Organizations).\
+    return db.query(models.Tickets).\
         offset(skip).limit(limit).all()
 
 
