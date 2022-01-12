@@ -34,7 +34,7 @@ def startup_event():
     # logger.info("Models created/updated sucessfuly")
 
 
-@app.get("/test", dependencies=[Depends(auth.authorization)])
+@app.get("/test")
 def get_test_endpoint(db: Session=Depends(get_db)):
     # if not token:
     #     raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
