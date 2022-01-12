@@ -29,8 +29,12 @@ app = FastAPI(
 )
 
 
-def api_token(token: str=Depends(APIKeyHeader(name="Token"))):
-    if token != TOKEN:
+def api_token(token: str=Depends(APIKeyHeader(name="Token")), 
+                db: Session=Depends(get_db)):
+    if not token:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
+    acess_token = crud.get_user_by_token(db, token)
+    if not acess_token:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
 
 
