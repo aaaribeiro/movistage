@@ -1,7 +1,6 @@
 # imports from third-party libraries
 from typing import List
 
-from sqlalchemy.util.langhelpers import dependencies
 from fastapi import Depends, APIRouter, HTTPException
 from sqlalchemy.orm import Session
 
