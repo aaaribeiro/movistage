@@ -20,22 +20,21 @@ from auth import auth
 DESCRIPTION = """
 """
 PREFIX = "/stage/movidesk/v1"
-TOKEN = "SECRET"
 #################################################
 
 app = FastAPI(
-    title="Netcon API",
+    title="NETCON",
     description=DESCRIPTION,
 )
 
 
-def api_token(token: str=Depends(APIKeyHeader(name="Token")), 
-                db: Session=Depends(get_db)):
-    if not token:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
-    acess_token = crud.get_user_by_token(db, token)
-    if not acess_token:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
+# def api_token(token: str=Depends(APIKeyHeader(name="Token")), 
+#                 db: Session=Depends(get_db)):
+#     if not token:
+#         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
+#     acess_token = crud.get_user_by_token(db, token)
+#     if not acess_token:
+#         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
 
 
 @app.on_event("startup")
@@ -43,7 +42,7 @@ def startup_event():
     models.Base.metadata.create_all(bind=engine)
 
 
-@app.get("/test", dependencies=[Depends(api_token)])
+@app.get("/test", dependencies=[Depends(auth.api_token)])
 def get_test_endpoint():
     #db: Session=Depends(get_db)):
     # if not token:
