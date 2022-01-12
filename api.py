@@ -1,9 +1,11 @@
 # imports from third-party libraries
 from typing import Optional
 
+from sqlalchemy.util.langhelpers import dependencies
+
 # from sqlalchemy.util.langhelpers import dependencies
-from fastapi import FastAPI#, Depends, HTTPException, status, Form
-# from fastapi.security import APIKeyHeader
+from fastapi import FastAPI, Depends, HTTPException, status #, Form
+from fastapi.security import APIKeyHeader
 
 # required imports from models package
 from models import models
@@ -21,6 +23,7 @@ from auth import auth
 DESCRIPTION = """
 """
 PREFIX = "/stage/movidesk/v1"
+TOKEN = "SECRET"
 #################################################
 
 app = FastAPI(
@@ -28,13 +31,18 @@ app = FastAPI(
     description=DESCRIPTION,
 )
 
+
+def api_token(token: str=Depends(APIKeyHeader(name="Token"))):
+    if token != TOKEN:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
+
+
 @app.on_event("startup")
 def startup_event():
     models.Base.metadata.create_all(bind=engine)
-    # logger.info("Models created/updated sucessfuly")
+    
 
-
-@app.get("/test")
+@app.get("/test", dependencies=[Depends(api_token)])
 def get_test_endpoint():
     #db: Session=Depends(get_db)):
     # if not token:
