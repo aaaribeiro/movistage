@@ -29,8 +29,6 @@ async def read_tickets(skip: int = 0, limit: int = 100,
     """
     Returns a tickets list from movidesk stage
     """
-
-    # auth.authorization(db, token)    
     tickets = crud.get_tickets(db, skip=skip, limit=limit)
     return tickets
 
@@ -38,13 +36,13 @@ async def read_tickets(skip: int = 0, limit: int = 100,
 @router.get(
     "/ticket/{ticket_id}",
     tags=TAGS,
-    response_model=schemas.Ticket
+    response_model=schemas.Ticket,
+    dependencies=[Depends(auth.api_token)]
 )
 async def read_ticket(ticket_id, token: str=None, db: Session=Depends(get_db)):
     """
     Returns a ticket object from movidesk stage
     """
-    auth.authorization(db, token)
     ticket = crud.get_ticket_by_id(db, id=ticket_id)
     if not ticket:
         raise HTTPException(status_code=400, detail="Ticket does not exists")
@@ -54,15 +52,14 @@ async def read_ticket(ticket_id, token: str=None, db: Session=Depends(get_db)):
 @router.post(
     "/ticket",
     tags=TAGS, 
-    response_model=schemas.Ticket
+    response_model=schemas.Ticket,
+    dependencies=[Depends(auth.api_token)]
 )
 async def create_ticket(ticket: schemas.Ticket, token: str=None,
                     db: Session=Depends(get_db)):
     """
     Create a ticket on movidesk stage
     """
-
-    auth.authorization(db, token)
     db_ticket = crud.get_ticket_by_id(db, id=ticket.ticket_id)
     if db_ticket:
         raise HTTPException(status_code=400, detail="Ticket already registered")
@@ -72,15 +69,14 @@ async def create_ticket(ticket: schemas.Ticket, token: str=None,
 @router.patch(
     "/ticket/{ticket_id}",
     tags=TAGS,
-    response_model=schemas.Ticket
+    response_model=schemas.Ticket,
+    dependencies=[Depends(auth.api_token)],
 )
 async def update_ticket(ticket_id: str, ticket: schemas.Ticket, token:str=None,
                         db: Session = Depends(get_db)):
     """
     Partial update from a ticket object
     """
-
-    auth.authorization(db, token)
     stored_ticket = crud.get_ticket_by_id(db, id=ticket_id)
     if not stored_ticket:
         raise HTTPException(status_code=404, detail="Ticket Not Found")

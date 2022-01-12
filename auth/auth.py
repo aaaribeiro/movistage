@@ -1,5 +1,5 @@
 from fastapi import Depends, HTTPException, status
-from fastapi.security import APIKeyHeader
+from fastapi.security import APIKeyQuery
 from sqlalchemy.orm import Session
 from models import crud 
 from utils.handlers import get_db
@@ -20,7 +20,7 @@ def admin_authorization(db, token):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
 
 
-def api_token(token: str=Depends(APIKeyHeader(name="Token")), 
+def api_token(token: str=Depends(APIKeyQuery(name="Token")), 
                 db: Session=Depends(get_db)):
     if not token:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
