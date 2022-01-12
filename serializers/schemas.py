@@ -31,6 +31,24 @@ class Organization(BaseModel):
         orm_mode = True
 
 
+
+class Ticket2(BaseModel):
+    ticket_id: Optional[int]
+    client: Optional[Organization]
+    created_date: Optional[datetime]
+    status: Optional[str]
+    owner_team: Optional[str]
+    category: Optional[str]
+    urgency: Optional[str]
+    subject: Optional[str]
+    agent: Optional[str]
+    sla_solution_date: Optional[datetime]
+    sla_first_response: Optional[datetime]
+
+    class Config:
+        orm_mode = True
+
+
 class TimeAppointment(BaseModel):
     ticket_time_appointment_pk: Optional[int]
     ticket_id: Optional[int]
