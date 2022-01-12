@@ -33,7 +33,7 @@ class Tickets(Base):
 
     # relationships
     time_appointments = relationship("TimeAppointments")
-    client =  relationship("Organization", back_populates="tickets")
+    client =  relationship("Organizations", back_populates="tickets")
 
 
 class Organizations(Base):
