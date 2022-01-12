@@ -1,5 +1,7 @@
 # imports from third-party libraries
 from typing import List
+
+from sqlalchemy.util.langhelpers import dependencies
 from fastapi import Depends, APIRouter, HTTPException
 from sqlalchemy.orm import Session
 
@@ -20,15 +22,16 @@ router = APIRouter()
 @router.get(
     "/tickets",
     tags=TAGS,
-    response_model=List[schemas.Ticket]
+    response_model=List[schemas.Ticket],
+    dependencies=[Depends(auth.api_token)]
 )
-async def read_tickets(token: str = None, skip: int = 0, limit: int = 100,
+async def read_tickets(skip: int = 0, limit: int = 100,
                 db:Session=Depends(get_db)):
     """
     Returns a tickets list from movidesk stage
     """
 
-    auth.authorization(db, token)    
+    # auth.authorization(db, token)    
     tickets = crud.get_tickets(db, skip=skip, limit=limit)
     return tickets
 
