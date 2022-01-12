@@ -1,9 +1,6 @@
 # imports from third-party libraries
 from typing import Optional
 
-from sqlalchemy.util.langhelpers import dependencies
-
-# from sqlalchemy.util.langhelpers import dependencies
 from fastapi import FastAPI, Depends, HTTPException, status #, Form
 from fastapi.security import APIKeyHeader
 
@@ -40,7 +37,7 @@ def api_token(token: str=Depends(APIKeyHeader(name="Token"))):
 @app.on_event("startup")
 def startup_event():
     models.Base.metadata.create_all(bind=engine)
-    
+
 
 @app.get("/test", dependencies=[Depends(api_token)])
 def get_test_endpoint():
