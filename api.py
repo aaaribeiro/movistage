@@ -42,8 +42,8 @@ def startup_event():
     models.Base.metadata.create_all(bind=engine)
 
 
-@app.get("/test", dependencies=[Depends(auth.api_token)])
-def get_test_endpoint():
+# @app.get("/test", dependencies=[Depends(auth.api_token)])
+# def get_test_endpoint():
     #db: Session=Depends(get_db)):
     # if not token:
     #     raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
@@ -51,7 +51,7 @@ def get_test_endpoint():
     # acess_token = crud.get_user_by_token(db, token)
     # if not acess_token:
     #     raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
-    return {"hello": "world"}
+    # return {"hello": "world"}
 
 
 # @app.get("/")
