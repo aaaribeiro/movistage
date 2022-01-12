@@ -18,7 +18,6 @@ from serializers import schemas
 def get_tickets(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Tickets, models.Organizations).\
         join(models.Organizations).\
-        filter(models.Tickets.client_id==models.Organizations.client_id).\
         offset(skip).limit(limit).all()
 
 
