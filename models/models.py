@@ -33,6 +33,7 @@ class Tickets(Base):
 
     # relationships
     time_appointments = relationship("TimeAppointments")
+    client =  relationship("Organization", back_populates="tickets")
 
 
 class Organizations(Base):
@@ -43,7 +44,7 @@ class Organizations(Base):
     organization_name = Column(String, nullable=False)
 
     # relationships
-    tickets = relationship("Tickets")
+    tickets = relationship("Tickets", back_populates="client")
 
 
 class TimeAppointments(Base):

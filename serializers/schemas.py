@@ -33,7 +33,7 @@ class Organization(BaseModel):
 
 class Ticket2(BaseModel):
     ticket_id: Optional[int]
-    client: Optional[Organization] = None
+    client_id: Optional[Organization] = None
     created_date: Optional[datetime]
     status: Optional[str]
     owner_team: Optional[str]
