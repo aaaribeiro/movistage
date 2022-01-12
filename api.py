@@ -35,7 +35,8 @@ def startup_event():
 
 
 @app.get("/test")
-def get_test_endpoint()#db: Session=Depends(get_db)):
+def get_test_endpoint():
+    #db: Session=Depends(get_db)):
     # if not token:
     #     raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
 
