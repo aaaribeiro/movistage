@@ -31,7 +31,7 @@ class Organization(BaseModel):
         orm_mode = True
 
 
-class Ticket2(BaseModel):
+class TicketNestedCompany(BaseModel):
     ticket_id: Optional[int]
     client: Optional[Organization] = None
     created_date: Optional[datetime]

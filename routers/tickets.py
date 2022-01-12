@@ -21,7 +21,7 @@ router = APIRouter()
 @router.get(
     "/tickets",
     tags=TAGS,
-    response_model=List[schemas.Ticket2],
+    response_model=List[schemas.TicketNestedCompany],
     dependencies=[Depends(auth.api_token)]
 )
 async def read_tickets(skip: int = 0, limit: int = 100,
@@ -36,7 +36,7 @@ async def read_tickets(skip: int = 0, limit: int = 100,
 @router.get(
     "/ticket/{ticket_id}",
     tags=TAGS,
-    response_model=schemas.Ticket,
+    response_model=schemas.TicketNestedCompany,
     dependencies=[Depends(auth.api_token)]
 )
 async def read_ticket(ticket_id, token: str=None, db: Session=Depends(get_db)):
