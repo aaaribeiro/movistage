@@ -22,13 +22,15 @@ router = APIRouter()
 @router.post(
     "/timeappointment",
     tags=TAGS,
-    response_model=schemas.TimeAppointment
+    response_model=schemas.TimeAppointment,
+    dependencies=[Depends(auth.api_token)],
 )
 async def create_time_appointment(time_appointment: schemas.TimeAppointment,
                                 token: str = None,
                                 db: Session=Depends(get_db)):
-
-    auth.authorization(db, token) 
+    """
+    Write something
+    """
     return crud.create_time_appointment(
         db=db,
         time_appointment=time_appointment
@@ -38,11 +40,13 @@ async def create_time_appointment(time_appointment: schemas.TimeAppointment,
 @router.get(
     "/timeappointment",
     tags=TAGS,
-    response_model=List[schemas.TimeAppointment]
+    response_model=List[schemas.TimeAppointment],
+    dependencies=[Depends(auth.api_token)],
 )
 def read_time_appointments(token: str = None, skip: int = 0, limit: int = 100,
                         db: Session = Depends(get_db)):
-    
-    auth.authorization(db, token) 
+    """
+    Write something
+    """
     time_appointments = crud.get_time_appointments(db, skip=skip, limit=limit)
     return time_appointments

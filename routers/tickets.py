@@ -91,14 +91,13 @@ async def update_ticket(ticket_id: str, ticket: schemas.Ticket, token:str=None,
 @router.delete(
     "/ticket/{ticket_id}",
     tags=TAGS,
-    response_model=schemas.Ticket
+    response_model=schemas.Ticket,
+    dependencies=[Depends(auth.api_token)],
 )
 async def delete_ticket(ticket_id = str, token:str=None, db: Session = Depends(get_db)):
     """
     Option to delete a ticket object from movidesk stage
     """
-    
-    auth.authorization(db, token)
     stored_ticket = crud.get_ticket_by_id(db, id=ticket_id)
     if not stored_ticket:
         raise HTTPException(status_code=404, detail="Ticket Not Found")

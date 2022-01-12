@@ -22,15 +22,14 @@ router = APIRouter()
 @router.get(
     "/organizations",
     tags=TAGS,
-    response_model=List[schemas.Organization]
+    response_model=List[schemas.Organization],
+    dependencies=[Depends(auth.api_token)],
 )
 async def read_organizations(token: str = None, skip: int = 0, limit: int = 100,
                             db: Session = Depends(get_db)):
     """
     Returns an organization list from movidesk stage
     """
-
-    auth.authorization(db, token) 
     organizations = crud.get_organizations(db, skip=skip, limit=limit)
     return organizations
 
@@ -38,15 +37,14 @@ async def read_organizations(token: str = None, skip: int = 0, limit: int = 100,
 @router.get(
     "/organization/{client_id}",
     tags=TAGS,
-    response_model=schemas.Organization
+    response_model=schemas.Organization,
+    dependencies=[Depends(auth.api_token)],
 )
 async def read_organization(client_id, token: str = None,
                             db: Session = Depends(get_db)):
     """
     Returns an organization object from movidesk stage
     """
-
-    auth.authorization(db, token) 
     organization = crud.get_customer_by_id(db, id=client_id)
     if not organization:
         raise HTTPException(
@@ -59,14 +57,14 @@ async def read_organization(client_id, token: str = None,
 @router.post(
     "/organization",
     tags=TAGS,
-    response_model=schemas.Organization
+    response_model=schemas.Organization,
+    dependencies=[Depends(auth.api_token)],
 )
 async def create_organization(organization: schemas.Organization,
                             token: str = None, db: Session=Depends(get_db)):
     """
     Create an organization in movidesk stage
     """
-    auth.authorization(db, token) 
     customer = crud.get_customer_by_id(db, id=organization.client_id)
     if customer:
         raise HTTPException(
@@ -79,7 +77,8 @@ async def create_organization(organization: schemas.Organization,
 @router.patch(
     "/organization/{client_id}",
     tags=TAGS,
-    response_model=schemas.Organization
+    response_model=schemas.Organization,
+    dependencies=[Depends(auth.api_token)],
 )
 async def update_organization(client_id: str,
                             organization: schemas.Organization,
@@ -87,8 +86,6 @@ async def update_organization(client_id: str,
     """
     Partial update from an organization object
     """
-
-    auth.authorization(db, token)
     stored_organization = crud.get_customer_by_id(db, id=client_id)
     if not stored_organization:
         raise HTTPException(status_code=404, detail="Organization Not Found")
@@ -103,15 +100,14 @@ async def update_organization(client_id: str,
 @router.delete(
     "/organization/{client_id}",
     tags=TAGS,
-    response_model=schemas.Organization
+    response_model=schemas.Organization,
+    dependencies=[Depends(auth.api_token)],
 )
 async def delete_organization(client_id = str, token: str = None,
                                 db: Session = Depends(get_db)):
     """
     Option to delete an object organization from movidesk stage
     """
-
-    auth.authorization(db, token) 
     stored_organization = crud.get_customer_by_id(db, id=client_id)
     if not stored_organization:
         raise HTTPException(status_code=404, detail="Organization Not Found")

@@ -3,7 +3,7 @@ from datetime import datetime
 
 # imports from third-party libraries
 from typing import List
-from fastapi import Depends,APIRouter, HTTPException, Request
+from fastapi import Depends, APIRouter, HTTPException, Request
 from sqlalchemy.orm import Session
 
 # required imports from package models
@@ -27,12 +27,14 @@ router = APIRouter()
 @router.post(
     "/hook/new/ticket",
     tags=TAGS,
-    response_model=schemas.WebhookLog
+    response_model=schemas.WebhookLog,
+    dependencies=[Depends(auth.api_token)],
 )
 async def create_hook_for_new_ticket(request: Request, token: str = None,
                     db: Session=Depends(get_db)):
-
-    auth.authorization(db, token)
+    """
+    Write something
+    """
     response = await request.json()
     webhook = schemas.WebhookLog(
         ticket_id = response["Id"],
@@ -47,12 +49,14 @@ async def create_hook_for_new_ticket(request: Request, token: str = None,
 @router.post(
     "/hook/update/ticket",
     tags=TAGS,
-    response_model=schemas.WebhookLog
+    response_model=schemas.WebhookLog,
+    dependencies=[Depends(auth.api_token)],
 )
 async def create_hook_for_update_ticket(request: Request, token: str = None,
                     db: Session=Depends(get_db)):
-
-    auth.authorization(db, token)
+    """
+    Write something
+    """
     response = await request.json()
     webhook = schemas.WebhookLog(
         ticket_id = response["Id"],
@@ -68,11 +72,14 @@ async def create_hook_for_update_ticket(request: Request, token: str = None,
 @router.post(
     "/hook/new/appointment",
     tags=TAGS,
-    response_model=schemas.WebhookLog
+    response_model=schemas.WebhookLog,
+    dependencies=[Depends(auth.api_token)],
 )
 async def create_hook_for_appointment(request: Request, token: str = None,
                     db: Session=Depends(get_db)):
-
+    """
+    Write something
+    """
     auth.authorization(db, token) 
     response = await request.json()
     webhook = schemas.WebhookLog(
@@ -85,61 +92,52 @@ async def create_hook_for_appointment(request: Request, token: str = None,
     return webhook
 
 
-
 @router.get(
     "/hooks",
     tags=TAGS,
-    response_model=List[schemas.WebhookLog]
+    response_model=List[schemas.WebhookLog],
+    dependencies=[Depends(auth.api_token)],
 )
 async def read_hooks(token: str = None, read: bool = None,
                         skip: int = 0, limit: int = 1000,
                         db:Session=Depends(get_db)):
-
     """
     Returns a hook list by ticket id
     """
-
-    auth.authorization(db, token)    
     hooks = crud.get_hook_logs(db, read=read, skip=skip, limit=limit)
     if not hooks:
         raise HTTPException(status_code=400, detail="All hooks were read")
     return hooks
 
 
-
 @router.get(
     "/hook/{ticket_id}",
     tags=TAGS,
-    response_model=List[schemas.WebhookLog]
+    response_model=List[schemas.WebhookLog],
+    dependencies=[Depends(auth.api_token)],
 )
 async def read_hooks_by_ticket_id(ticket_id: int, token: str = None,
                         skip: int = 0, limit: int = 100,
                         db:Session=Depends(get_db)):
-
     """
     Returns a hook list by ticket id
     """
-
-    auth.authorization(db, token)    
     hooks = crud.get_hooks_by_ticket_id(db, ticket_id=ticket_id, skip=skip,
         limit=limit)
     return hooks
 
 
-
 @router.patch(
     "/hook/{hook_id}",
     tags=TAGS,
-    response_model=schemas.WebhookLog
+    response_model=schemas.WebhookLog,
+    dependencies=[Depends(auth.api_token)],
 )
 async def update_hook(hook_id: str, hook: schemas.WebhookLog, token:str=None,
                         db: Session = Depends(get_db)):
-
     """
     Partial update for webhook logs
     """
-
-    auth.authorization(db, token)
     stored_hook = crud.get_hook_by_id(db, id=hook_id)
     if not stored_hook:
         raise HTTPException(status_code=404, detail="Hook Not Found")
