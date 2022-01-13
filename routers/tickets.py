@@ -1,7 +1,7 @@
 # imports from third-party libraries
 from typing import List
 
-from fastapi import Depends, APIRouter, HTTPException
+from fastapi import Depends, APIRouter, HTTPException, status
 from sqlalchemy.orm import Session
 
 # required imports from package models 
@@ -51,7 +51,8 @@ async def read_ticket(ticket_id, token: str=None, db: Session=Depends(get_db)):
 
 @router.post(
     "/ticket",
-    tags=TAGS, 
+    tags=TAGS,
+    status_code=status.HTTP_201_CREATED, 
     response_model=schemas.Ticket,
     dependencies=[Depends(auth.api_token)]
 )
