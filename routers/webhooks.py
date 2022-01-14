@@ -83,7 +83,6 @@ async def create_hook_for_appointment(request: Request, token: str = None,
     """
     Write something
     """
-    auth.authorization(db, token) 
     response = await request.json()
     webhook = schemas.WebhookLog(
         ticket_id = response["Id"],
