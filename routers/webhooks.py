@@ -3,7 +3,7 @@ from datetime import datetime
 
 # imports from third-party libraries
 from typing import List
-from fastapi import Depends, APIRouter, HTTPException, Request
+from fastapi import Depends, APIRouter, HTTPException, Request, status
 from sqlalchemy.orm import Session
 
 # required imports from package models
@@ -27,6 +27,7 @@ router = APIRouter()
 @router.post(
     "/hook/new/ticket",
     tags=TAGS,
+    status_code=status.HTTP_201_CREATED, 
     response_model=schemas.WebhookLog,
     dependencies=[Depends(auth.api_token)],
 )
@@ -49,6 +50,7 @@ async def create_hook_for_new_ticket(request: Request, token: str = None,
 @router.post(
     "/hook/update/ticket",
     tags=TAGS,
+    status_code=status.HTTP_201_CREATED, 
     response_model=schemas.WebhookLog,
     dependencies=[Depends(auth.api_token)],
 )
@@ -72,6 +74,7 @@ async def create_hook_for_update_ticket(request: Request, token: str = None,
 @router.post(
     "/hook/new/appointment",
     tags=TAGS,
+    status_code=status.HTTP_201_CREATED, 
     response_model=schemas.WebhookLog,
     dependencies=[Depends(auth.api_token)],
 )

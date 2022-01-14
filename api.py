@@ -1,20 +1,21 @@
 # imports from third-party libraries
-from typing import Optional
+# from typing import Optional
 
-from fastapi import FastAPI, Depends, HTTPException, status #, Form
-from fastapi.security import APIKeyHeader
+from fastapi import FastAPI #, Depends, HTTPException, status ,Form
+# from fastapi.security import APIKeyHeader
 
 # required imports from models package
 from models import models
 from models.database import engine
-from models import crud
+# from models import crud
+
 # required imports from package utils 
-from utils.handlers import get_db
-from sqlalchemy.orm import Session
+# from utils.handlers import get_db
+# from sqlalchemy.orm import Session
 
 # required imports from utils package
 from routers import organizations, tickets, time_appointments, webhooks, users
-from auth import auth
+# from auth import auth
 
 ################## constants ####################
 DESCRIPTION = """

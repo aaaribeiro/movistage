@@ -1,6 +1,6 @@
 # imports from third-party libraries
 from typing import List
-from fastapi import Depends, APIRouter, HTTPException
+from fastapi import Depends, APIRouter, HTTPException, status
 from sqlalchemy.orm import Session
 
 # required imports from models package
@@ -22,6 +22,7 @@ router = APIRouter()
 @router.post(
     "/timeappointment",
     tags=TAGS,
+    status_code=status.HTTP_201_CREATED, 
     response_model=schemas.TimeAppointment,
     dependencies=[Depends(auth.api_token)],
 )

@@ -1,6 +1,6 @@
 # imports from third-party libraries
 from typing import List
-from fastapi import Depends, APIRouter, HTTPException
+from fastapi import Depends, APIRouter, HTTPException, status
 from sqlalchemy.orm import Session
 
 # required imports from package models 
@@ -57,6 +57,7 @@ async def read_organization(client_id, token: str = None,
 @router.post(
     "/organization",
     tags=TAGS,
+    status_code=status.HTTP_201_CREATED, 
     response_model=schemas.Organization,
     dependencies=[Depends(auth.api_token)],
 )
