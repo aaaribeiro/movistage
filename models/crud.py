@@ -86,8 +86,8 @@ def create_organization(db: Session, organization: schemas.Organization):
         )
     db.add(customer)
     db.commit()
-    db.refresh(customer)
-    return customer
+    # db.refresh(customer)
+    # return customer
 
 
 def partial_update_organization(db: Session, id: str, 
@@ -138,8 +138,8 @@ def create_time_appointment(db: Session,
     )
     db.add(db_time_appointment)
     db.commit()
-    db.refresh(db_time_appointment)
-    return db_time_appointment
+    # db.refresh(db_time_appointment)
+    # return db_time_appointment
 
 
 ### WEBHOOK ###
@@ -177,8 +177,8 @@ def create_hook(db: Session, webhook: schemas.WebhookLog):
     )
     db.add(db_webhook)
     db.commit()
-    db.refresh(db_webhook)
-    return True
+    # db.refresh(db_webhook)
+    # return True
 
 
 ## USER
