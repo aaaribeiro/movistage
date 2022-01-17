@@ -43,15 +43,16 @@ async def create_hook_for_new_ticket(request: Request, token: str = None,
         trigger_date = datetime.now(),
         was_read = False
     )
-    webhook = crud.create_hook(db, webhook)
-    return webhook
+    crud.create_hook(db, webhook)
+    # webhook = crud.create_hook(db, webhook)
+    # return webhook
 
 
 @router.post(
     "/hook/update/ticket",
     tags=TAGS,
     status_code=status.HTTP_201_CREATED, 
-    response_model=schemas.WebhookLog,
+    # response_model=schemas.WebhookLog,
     dependencies=[Depends(auth.api_token)],
 )
 async def create_hook_for_update_ticket(request: Request, token: str = None,
@@ -66,8 +67,9 @@ async def create_hook_for_update_ticket(request: Request, token: str = None,
         trigger_date = datetime.now(),
         was_read = False
     )
-    webhook = crud.create_hook(db, webhook)
-    return webhook
+    crud.create_hook(db, webhook)
+    # webhook = crud.create_hook(db, webhook)
+    # return webhook
 
 
 
@@ -75,7 +77,7 @@ async def create_hook_for_update_ticket(request: Request, token: str = None,
     "/hook/new/appointment",
     tags=TAGS,
     status_code=status.HTTP_201_CREATED, 
-    response_model=schemas.WebhookLog,
+    # response_model=schemas.WebhookLog,
     dependencies=[Depends(auth.api_token)],
 )
 async def create_hook_for_appointment(request: Request, token: str = None,
@@ -90,8 +92,9 @@ async def create_hook_for_appointment(request: Request, token: str = None,
         trigger_date = datetime.now(),
         was_read = False
     )
-    webhook = crud.create_hook(db, webhook)
-    return webhook
+    crud.create_hook(db, webhook)
+    # webhook = crud.create_hook(db, webhook)
+    # return webhook
 
 
 @router.get(

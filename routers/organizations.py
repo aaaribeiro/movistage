@@ -72,7 +72,8 @@ async def create_organization(organization: schemas.Organization,
             status_code=400,
             detail="Organization already registered"
         )
-    return crud.create_organization(db=db, organization=organization)
+    # return crud.create_organization(db=db, organization=organization)
+    crud.create_organization(db=db, organization=organization)
 
 
 @router.patch(

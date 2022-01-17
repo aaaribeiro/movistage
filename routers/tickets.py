@@ -53,7 +53,7 @@ async def read_ticket(ticket_id, token: str=None, db: Session=Depends(get_db)):
     "/ticket",
     tags=TAGS,
     status_code=status.HTTP_201_CREATED, 
-    response_model=schemas.Ticket,
+    # response_model=schemas.Ticket,
     dependencies=[Depends(auth.api_token)]
 )
 async def create_ticket(ticket: schemas.Ticket, token: str=None,
@@ -64,7 +64,8 @@ async def create_ticket(ticket: schemas.Ticket, token: str=None,
     db_ticket = crud.get_ticket_by_id(db, id=ticket.ticket_id)
     if db_ticket:
         raise HTTPException(status_code=400, detail="Ticket already registered")
-    return crud.create_ticket(db=db, ticket=ticket)
+    # return crud.create_ticket(db=db, ticket=ticket)
+    crud.create_ticket(db=db, ticket=ticket)
 
 
 @router.patch(

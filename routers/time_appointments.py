@@ -23,7 +23,7 @@ router = APIRouter()
     "/timeappointment",
     tags=TAGS,
     status_code=status.HTTP_201_CREATED, 
-    response_model=schemas.TimeAppointment,
+    # response_model=schemas.TimeAppointment,
     dependencies=[Depends(auth.api_token)],
 )
 async def create_time_appointment(time_appointment: schemas.TimeAppointment,
@@ -32,7 +32,12 @@ async def create_time_appointment(time_appointment: schemas.TimeAppointment,
     """
     Write something
     """
-    return crud.create_time_appointment(
+    # return crud.create_time_appointment(
+    #     db=db,
+    #     time_appointment=time_appointment
+    # )
+    
+    crud.create_time_appointment(
         db=db,
         time_appointment=time_appointment
     )

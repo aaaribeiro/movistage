@@ -41,8 +41,8 @@ def create_ticket(db: Session, ticket: schemas.Ticket):
     )
     db.add(db_ticket)
     db.commit()
-    db.refresh(db_ticket)
-    return db_ticket
+    # db.refresh(db_ticket)
+    # return db_ticket
 
 
 def partial_update_ticket(db: Session, id: str, 
