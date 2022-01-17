@@ -52,11 +52,11 @@ def partial_update_ticket(db: Session, id: str,
         ticket.dict(exclude_unset=True))        
     db.commit()
     # db.flush()
-    db_ticket_updated = get_ticket_by_id(
-        db,
-        id=id
-    )
-    return db_ticket_updated
+    # db_ticket_updated = get_ticket_by_id(
+    #     db,
+    #     id=id
+    # )
+    # return db_ticket_updated
 
 
 def delete_ticket(db: Session, id: int):
@@ -97,11 +97,11 @@ def partial_update_organization(db: Session, id: str,
         organization.dict(exclude_unset=True))        
     db.commit()
     # db.flush()
-    db_organization_updated = get_customer_by_id(
-        db,
-        id=id
-    )
-    return db_organization_updated
+    # db_organization_updated = get_customer_by_id(
+    #     db,
+    #     id=id
+    # )
+    # return db_organization_updated
 
 
 def delete_organization(db: Session, id: str):
@@ -257,8 +257,8 @@ def partial_update_hook(db: Session, id: str,
         models.WebhookLogs.hook_id==id).update(
         hook.dict(exclude_unset=True))        
     db.commit()
-    db_hook_updated = get_hook_by_id(
-        db,
-        id=id
-    )
-    return db_hook_updated
+    # db_hook_updated = get_hook_by_id(
+    #     db,
+    #     id=id
+    # )
+    # return db_hook_updated
