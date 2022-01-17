@@ -37,7 +37,7 @@ def create_ticket(db: Session, ticket: schemas.Ticket):
         subject = ticket.subject,
         created_date = ticket.created_date,
         sla_solution_date = ticket.sla_solution_date,
-        sla_first_response = ticket.sla_first_response
+        sla_first_response = ticket.sla_first_response,
     )
     db.add(db_ticket)
     db.commit()

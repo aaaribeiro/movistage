@@ -78,7 +78,8 @@ async def create_organization(organization: schemas.Organization,
 @router.patch(
     "/organization/{client_id}",
     tags=TAGS,
-    response_model=schemas.Organization,
+    status_code=status.HTTP_204_NO_CONTENT, 
+    # response_model=schemas.Organization,
     dependencies=[Depends(auth.api_token)],
 )
 async def update_organization(client_id: str,
@@ -91,7 +92,7 @@ async def update_organization(client_id: str,
     if not stored_organization:
         raise HTTPException(status_code=404, detail="Organization Not Found")
     
-    return crud.partial_update_organization(
+    crud.partial_update_organization(
         db,
         id=client_id,
         organization=organization

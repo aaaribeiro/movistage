@@ -132,7 +132,8 @@ async def read_hooks_by_ticket_id(ticket_id: int, token: str = None,
 @router.patch(
     "/hook/{hook_id}",
     tags=TAGS,
-    response_model=schemas.WebhookLog,
+    status_code=status.HTTP_204_NO_CONTENT, 
+    # response_model=schemas.WebhookLog,
     dependencies=[Depends(auth.api_token)],
 )
 async def update_hook(hook_id: str, hook: schemas.WebhookLog, token:str=None,
@@ -144,8 +145,4 @@ async def update_hook(hook_id: str, hook: schemas.WebhookLog, token:str=None,
     if not stored_hook:
         raise HTTPException(status_code=404, detail="Hook Not Found")
     
-    return crud.partial_update_hook(
-        db,
-        id=hook_id,
-        hook=hook,
-    )
+    crud.partial_update_hook(db, id=hook_id, hook=hook,)

@@ -70,7 +70,8 @@ async def create_ticket(ticket: schemas.Ticket, token: str=None,
 @router.patch(
     "/ticket/{ticket_id}",
     tags=TAGS,
-    response_model=schemas.Ticket,
+    status_code=status.HTTP_204_NO_CONTENT, 
+    # response_model=schemas.Ticket,
     dependencies=[Depends(auth.api_token)],
 )
 async def update_ticket(ticket_id: str, ticket: schemas.Ticket, token:str=None,
@@ -82,7 +83,7 @@ async def update_ticket(ticket_id: str, ticket: schemas.Ticket, token:str=None,
     if not stored_ticket:
         raise HTTPException(status_code=404, detail="Ticket Not Found")
     
-    return crud.partial_update_ticket(
+    crud.partial_update_ticket(
         db,
         id=ticket_id,
         ticket=ticket
