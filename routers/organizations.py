@@ -58,7 +58,7 @@ async def read_organization(client_id, token: str = None,
     "/organization",
     tags=TAGS,
     status_code=status.HTTP_201_CREATED, 
-    response_model=schemas.Organization,
+    # response_model=schemas.Organization,
     dependencies=[Depends(auth.api_token)],
 )
 async def create_organization(organization: schemas.Organization,
