@@ -1,9 +1,3 @@
-# import logging # library for logging
-# import logging.config # logging config file
-
-# logging.config.fileConfig("logging.config")
-# logger = logging.getLogger("sqlalchemy")
-
 import uuid
 
 from sqlalchemy.orm import Session

@@ -19,14 +19,14 @@ class Tickets(Base):
     
     __tablename__ = "tickets"
 
-    ticket_id = Column(Integer, primary_key=True, nullable=False)
-    client_id = Column(String,  ForeignKey("organization.client_id"), nullable=False)
-    created_date = Column(DateTime, nullable=False)
-    status = Column(String, nullable=False)
+    ticket_id = Column(Integer, primary_key=True)
+    client_id = Column(String,  ForeignKey("organization.client_id"))
+    created_date = Column(DateTime)
+    status = Column(String)
     owner_team = Column(String)
-    category = Column(String, nullable=False)
-    urgency = Column(String, nullable=False)
-    subject =  Column(String, nullable=False)
+    category = Column(String)
+    urgency = Column(String)
+    subject =  Column(String)
     agent = Column(String)
     sla_solution_date = Column(DateTime)
     sla_first_response = Column(DateTime)
@@ -53,8 +53,8 @@ class TimeAppointments(Base):
 
     ticket_time_appointment_pk = Column(Integer, primary_key=True, nullable=False)
     ticket_id = Column(Integer, ForeignKey("tickets.ticket_id"), nullable=False)
-    time_appointment = Column(Time, nullable=False)
-    agent = Column(String, nullable=False)
+    time_appointment = Column(Time)
+    agent = Column(String)
 
 
 class WebhookLogs(Base):
