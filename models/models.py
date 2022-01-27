@@ -63,7 +63,7 @@ class TimeAppointments(Base):
 
     ticket_time_appointment_pk = Column(Integer, primary_key=True)
     ticket_id = Column(Integer, ForeignKey("tickets.ticket_id"), nullable=False)
-    agent_id = Column(Integer, ForeignKey("agents.agent_id"), nullable=False)
+    agent_id = Column(String, ForeignKey("agents.agent_id"), nullable=False)
     time_appointment = Column(Time)
 
 
