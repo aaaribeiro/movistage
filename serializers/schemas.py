@@ -51,8 +51,18 @@ class TicketNestedCompany(BaseModel):
 class TimeAppointment(BaseModel):
     ticket_time_appointment_pk: Optional[int]
     ticket_id: Optional[int]
+    agent_id: Optional[str]
     time_appointment: Optional[time]
-    agent: Optional[str]
+    
+    class Config:
+        orm_mode = True
+
+
+class Agent(BaseModel):
+
+    agent_id: Optional[str]
+    agent_name: Optional[str]
+    agent_team: Optional[str]
 
     class Config:
         orm_mode = True

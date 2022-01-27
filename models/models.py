@@ -20,7 +20,7 @@ class Tickets(Base):
     __tablename__ = "tickets"
 
     ticket_id = Column(Integer, primary_key=True)
-    client_id = Column(String,  ForeignKey("organization.client_id"))
+    organization_id = Column(String,  ForeignKey("organizations.organization_id"))
     created_date = Column(DateTime)
     status = Column(String)
     owner_team = Column(String)
@@ -38,31 +38,41 @@ class Tickets(Base):
 
 class Organizations(Base):
 
-    __tablename__ = "organization"
+    __tablename__ = "organizations"
 
-    client_id = Column(String, primary_key=True, nullable=False)
+    organization_id = Column(String, primary_key=True)
     organization_name = Column(String, nullable=False)
 
     # relationships
     tickets = relationship("Tickets", back_populates="client")
 
 
+class Agents(Base):
+
+    __tablename__ = "agents"
+
+    agent_id = Column(String, primary_key=True)
+    agent_name = Column(String)
+    agent_team = Column(String)
+
+
+
 class TimeAppointments(Base):
 
-    __tablename__ = "ticket_time_appointment"
+    __tablename__ = "time_appointments"
 
-    ticket_time_appointment_pk = Column(Integer, primary_key=True, nullable=False)
+    ticket_time_appointment_pk = Column(Integer, primary_key=True)
     ticket_id = Column(Integer, ForeignKey("tickets.ticket_id"), nullable=False)
+    agent_id = Column(Integer, ForeignKey("agents.agent_id"), nullable=False)
     time_appointment = Column(Time)
-    agent = Column(String)
+
 
 
 class WebhookLogs(Base):
 
     __tablename__ = "webhook_log"
 
-    hook_id = Column(Integer, primary_key=True, nullable=False,
-        autoincrement=True)
+    hook_id = Column(Integer, primary_key=True, autoincrement=True)
     ticket_id = Column(Integer, nullable=False)
     change = Column(String, nullable=False)
     trigger_date = Column(DateTime, nullable=False)
