@@ -6,7 +6,7 @@ class DbHandler:
        self.db = SessionLocal()
        return self.db
     
-    def __exit__(self, exc_type, exc_value, exc_tb): 
+    def __exit__(self, exc_type, exc_value, exc_tb):
         self.db.close()
 
 

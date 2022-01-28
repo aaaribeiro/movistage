@@ -5,11 +5,9 @@
 # logger = logging.getLogger("sqlalchemy")
 
 from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, Time
-from sqlalchemy.orm import relationship
-from sqlalchemy.orm import backref
+from sqlalchemy.orm import relationship, backref
 from sqlalchemy.sql.expression import null
 from sqlalchemy.sql.sqltypes import Boolean
-from routers import webhooks
 from sqlalchemy_utils import EmailType, PasswordType
 # from sqlalchemy.sql.sqltypes import Boolean
 
@@ -17,54 +15,59 @@ from .database import Base
 
 class Tickets(Base):
     
-    __tablename__ = "tickets"
-
+    # tablename
+    __tablename__ = "mov_tickets"
+    # columns
     ticket_id = Column(Integer, primary_key=True)
-    organization_id = Column(String,  ForeignKey("organizations.organization_id"))
+    organization_id = Column(String, ForeignKey("mov_organizations.organization_id"))
+    agent_id = Column(String, ForeignKey("mov_agents.agent_id"))
     created_date = Column(DateTime)
     status = Column(String)
-    owner_team = Column(String)
     category = Column(String)
     urgency = Column(String)
-    subject =  Column(String)
-    agent = Column(String)
+    subject =  Column(String)    
     sla_solution_date = Column(DateTime)
     sla_first_response = Column(DateTime)
-
     # relationships
     time_appointments = relationship("TimeAppointments")
-    client =  relationship("Organizations", back_populates="tickets")
+    organization =  relationship("Organizations", back_populates="tickets")
+    agent = relationship("Agents", back_populates="tickets")
 
 
 class Organizations(Base):
 
-    __tablename__ = "organizations"
+    __tablename__ = "mov_organizations"
 
     organization_id = Column(String, primary_key=True)
     organization_name = Column(String, nullable=False)
 
     # relationships
-    tickets = relationship("Tickets", back_populates="client")
+    tickets = relationship("Tickets", back_populates="organization")
 
 
 class Agents(Base):
 
-    __tablename__ = "agents"
+    __tablename__ = "mov_agents"
 
     agent_id = Column(String, primary_key=True)
     agent_name = Column(String)
     agent_team = Column(String)
 
+    # relationships
+    tickets = relationship("Tickets", back_populates="agent")
+    time_appointments = relationship("TimeAppointments", back_populates="agent")
 
 
 class TimeAppointments(Base):
 
-    __tablename__ = "time_appointments"
+    __tablename__ = "mov_times"
 
-    ticket_time_appointment_pk = Column(Integer, primary_key=True)
-    ticket_id = Column(Integer, ForeignKey("tickets.ticket_id"), nullable=False)
-    agent_id = Column(String, ForeignKey("agents.agent_id"), nullable=False)
+    time_appointment_id = Column(Integer, primary_key=True)
+    ticket_id = Column(Integer, ForeignKey("mov_tickets.ticket_id"), nullable=False)
+    agent_id = Column(String, ForeignKey("mov_agents.agent_id"), nullable=False)
     time_appointment = Column(Time)
+
+    agent = relationship("Agents", back_populates="time_appointments")
 
 
 

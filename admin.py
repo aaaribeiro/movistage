@@ -8,12 +8,12 @@ import click
 from utils.handlers import DbHandler
 from utils.customtypes import Email
 from models import models
-from models import crud
+from models import _crud
 
 
 def check_user(ctx, param, value):
     with DbHandler() as db:
-        db_user = crud.get_user_by_email(db, value)
+        db_user = _crud.get_user_by_email(db, value)
         if ctx.command.name == "user":
             if db_user: # quit if user exists
                 click.echo(f"User {value} already registered")
@@ -64,14 +64,14 @@ def token(email, password):
     """
 
     with DbHandler() as db:    
-        db_user = crud.get_user_by_email(db, email)
+        db_user = _crud.get_user_by_email(db, email)
         if db_user.password != password: # quit if passwords don't match
             click.echo("Password doesn't match")
             exit()
         else: 
-            token = crud.get_access_token(db, db_user) # get token if exists
+            token = _crud.get_access_token(db, db_user) # get token if exists
             if not token: # create a new one if doesn't
-                token = crud.create_access_token(db, db_user)
+                token = _crud.create_access_token(db, db_user)
             click.echo(f"Token: {token.access_token}")
     
 
@@ -86,16 +86,16 @@ def update_password(email, password):
     """
 
     with DbHandler() as db:
-        db_user = crud.get_user_by_email(db, email)
+        db_user = _crud.get_user_by_email(db, email)
         # if password equal the previous one BINGO! you don't need to change your password
         if password == db_user.password: 
             click.echo("Password currently in use")
             exit()
         else:
-            db_token = crud.get_token_by_user_id(db, db_user.user_id)
+            db_token = _crud.get_token_by_user_id(db, db_user.user_id)
             # if token for this user exists, delete it
             if db_token:
-                crud.delete_token(db, db_user.user_id)
+                _crud.delete_token(db, db_user.user_id)
                 click.echo("-> Token deleted, a new one has to be created")
             db_user.password = password 
             db.commit()            

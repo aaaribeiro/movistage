@@ -4,7 +4,7 @@ from fastapi import Depends, APIRouter, HTTPException, status
 from sqlalchemy.orm import Session
 
 # required imports from package models 
-from models import crud 
+from models import _crud 
 from serializers import schemas
 
 # required imports from package utils
@@ -30,7 +30,7 @@ async def read_organizations(token: str = None, skip: int = 0, limit: int = 100,
     """
     Returns an organization list from movidesk stage
     """
-    organizations = crud.get_organizations(db, skip=skip, limit=limit)
+    organizations = _crud.get_organizations(db, skip=skip, limit=limit)
     return organizations
 
 
@@ -45,7 +45,7 @@ async def read_organization(client_id, token: str = None,
     """
     Returns an organization object from movidesk stage
     """
-    organization = crud.get_customer_by_id(db, id=client_id)
+    organization = _crud.get_customer_by_id(db, id=client_id)
     if not organization:
         raise HTTPException(
             status_code=400,
@@ -66,14 +66,14 @@ async def create_organization(organization: schemas.Organization,
     """
     Create an organization in movidesk stage
     """
-    customer = crud.get_customer_by_id(db, id=organization.client_id)
+    customer = _crud.get_customer_by_id(db, id=organization.client_id)
     if customer:
         raise HTTPException(
             status_code=400,
             detail="Organization already registered"
         )
     # return crud.create_organization(db=db, organization=organization)
-    crud.create_organization(db=db, organization=organization)
+    _crud.create_organization(db=db, organization=organization)
 
 
 @router.patch(
@@ -89,11 +89,11 @@ async def update_organization(client_id: str,
     """
     Partial update from an organization object
     """
-    stored_organization = crud.get_customer_by_id(db, id=client_id)
+    stored_organization = _crud.get_customer_by_id(db, id=client_id)
     if not stored_organization:
         raise HTTPException(status_code=404, detail="Organization Not Found")
     
-    crud.partial_update_organization(
+    _crud.partial_update_organization(
         db,
         id=client_id,
         organization=organization
@@ -111,11 +111,11 @@ async def delete_organization(client_id = str, token: str = None,
     """
     Option to delete an object organization from movidesk stage
     """
-    stored_organization = crud.get_customer_by_id(db, id=client_id)
+    stored_organization = _crud.get_customer_by_id(db, id=client_id)
     if not stored_organization:
         raise HTTPException(status_code=404, detail="Organization Not Found")
     
-    deleted_organization = crud.delete_organization(db, id=client_id)
+    deleted_organization = _crud.delete_organization(db, id=client_id)
     
     if not deleted_organization:
         raise HTTPException(

@@ -1,9 +1,13 @@
+# from sqlite3 import IntegrityError
+# import psycopg2
 import uuid
 
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.expression import func
+from sqlalchemy.exc import IntegrityError
 
 from models import models
+from routers import organizations
 from serializers import schemas
 
 
@@ -83,6 +87,7 @@ class CRUDTicket:
 
 
 
+
 class CRUDOrganization:
     
     def read_organization_by_id(self, db: Session, id: str):
@@ -101,11 +106,6 @@ class CRUDOrganization:
 
 class CRUDAgent:
 
-    def read_agents(self, db: Session, skip: int=0, limit: int=100):
-        return db.query(models.Agents).\
-            offset(skip).limit(limit).all()
-
-
     def read_agent_by_id(self, db: Session, id: str):
         return db.query(models.Agents).get(id)
 
@@ -120,55 +120,109 @@ class CRUDAgent:
         db.commit()
 
 
-
-class CRUDTimeAppointment:
-
-    def read_time_appointment_by_id(db:Session, id: int):
-        return db.query(models.TimeAppointments).get(id)
-
-
-    def create_time_appointment(db: Session,
-                                payload: schemas.TimeAppointment):
-        dbtime = models.TimeAppointments(
-            time_appointment_id = payload.time_appointment_id,
-            ticket_id = payload.ticket_id,
-            agent_id = payload.agent_id,
-            time_appointment = payload.time_appointment,
-        )
-        db.add(dbtime)
-        db.commit()
+# agents
+# def read_agent_by_id(db: Session, id: str):
+#     agent = db.query(models.Agents).get(id)
+#     return agent
 
 
-    def update_time_appointment(self, db: Session,
-                                payload: schemas.TimeAppointment,
-                                dbtime: models.TimeAppointments):
+# def create_agent(db: Session, agent: schemas.Agent):
+#     db_agent = models.Agents(
+#         agent_id = agent.agent_id,
+#         agent_name = agent.agent_name,
+#         agent_team = agent.agent_team,
+#     )
+#     db.add(db_agent)
+#     db.commit()
 
-        dbtime.time_appointment_id = payload.time_appointment_id
-        dbtime.agent_id = payload.agent_id
-        dbtime.ticket_id = payload.ticket_id
-        dbtime.time_appointment = payload.time_appointment
-        db.commit()
 
-# def get_time_appointment_by_ticket_id(db: Session, ticket_id: int):
-#     return db.query(models.TimeAppointments).filter(
-#         models.TimeAppointments.ticket_id==ticket_id).first()
+# def partial_update_ticket(db: Session, id: str, 
+#                         ticket: schemas.Ticket):
+#     db.query(models.Tickets).filter(
+#         models.Tickets.ticket_id==id).update(
+#         ticket.dict(exclude_unset=True))        
+#     db.commit()
+
+
+
+# def delete_ticket(db: Session, id: int):
+#     db_ticket = get_ticket_by_id(db, id)
+#     db.delete(db_ticket)
+#     db.commit()
+
+
+### ORGANIZATIONS ###
+# def read_organizations(db: Session, skip: int = 0, limit: int = 100):
+#     return db.query(models.Organizations).offset(
+#         skip).limit(limit).all()
+
+
+# def read_organization_by_id(db: Session, id: str):
+#     organization = db.query(models.Organizations).get(id)
+#     return organization 
+
+
+# def create_organization(db: Session, organization: schemas.Organization):
+#     customer = models.Organizations(
+#         organization_id = organization.organization_id,
+#         organization_name = organization.organization_name
+#         )
+#     db.add(customer)
+#     db.commit()
+
+
+# def partial_update_organization(db: Session, id: str, 
+#                                 organization: schemas.Organization):
+#     db.query(models.Organizations).filter(
+#         models.Organizations.client_id==id).update(
+#         organization.dict(exclude_unset=True))        
+#     try:
+#         db.commit()
+#     except IntegrityError as err:
+#         db.rollback()
+#         print(err)
+    # db.flush()
+    # db_organization_updated = get_customer_by_id(
+    #     db,
+    #     id=id
+    # )
+    # return db_organization_updated
+
+
+# def delete_organization(db: Session, id: str):
+#     db_organization = get_customer_by_id(db, id)
+#     db.delete(db_organization)
+#     db.commit()
+#     return True 
+
+
+### TIME APPOINTMENTS ###
+
+def get_time_appointments(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.TimeAppointments).offset(
+        skip).limit(limit).all()
+
+
+def get_time_appointment_by_ticket_id(db: Session, ticket_id: int):
+    return db.query(models.TimeAppointments).filter(
+        models.TimeAppointments.ticket_id==ticket_id).first()
     
 
-# def get_time_appointment_max_id(db: Session):
-#     return db.query(func.max(
-#         models.TimeAppointments.ticket_time_appointment_pk)).first()
+def get_time_appointment_max_id(db: Session):
+    return db.query(func.max(
+        models.TimeAppointments.ticket_time_appointment_pk)).first()
 
 
-# def create_time_appointment(db: Session,
-#                             time_appointment: schemas.TimeAppointment):
-#     db_time_appointment = models.TimeAppointments(
-#         # ticket_time_appointment_pk = get_time_appointment_max_id(db)[0] + 1,
-#         ticket_id = time_appointment.ticket_id,
-#         time_appointment = time_appointment.time_appointment,
-#         agent = time_appointment.agent
-#     )
-#     db.add(db_time_appointment)
-#     db.commit()
+def create_time_appointment(db: Session,
+                            time_appointment: schemas.TimeAppointment):
+    db_time_appointment = models.TimeAppointments(
+        # ticket_time_appointment_pk = get_time_appointment_max_id(db)[0] + 1,
+        ticket_id = time_appointment.ticket_id,
+        time_appointment = time_appointment.time_appointment,
+        agent = time_appointment.agent
+    )
+    db.add(db_time_appointment)
+    db.commit()
     # db.refresh(db_time_appointment)
     # return db_time_appointment
 
@@ -265,6 +319,11 @@ def get_user_by_token(db: Session, token: str):
             join(models.Users).filter(
         models.AccessToken.access_token==token).first()
 
+
+# def delete_token(db: Session, token_model: models.AccessToken):
+#     db.delete(token_model)
+#     db.commit()
+#     return True
 
 
 def get_token_by_user_id(db: Session, id: int):
