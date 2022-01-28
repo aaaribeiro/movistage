@@ -18,7 +18,7 @@ filelock==3.0.12
 future==0.18.2
 gunicorn==20.1.0
 h11==0.12.0
-idna==3.3
+idna==2.8
 isodate==0.6.0
 isort==5.7.0
 jdcal==1.4.1
