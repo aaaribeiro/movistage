@@ -39,7 +39,7 @@ async def crud_ticket(request: Request, db: Session=Depends(get_db)):
     ticket = movidesk.get_ticket(response["Id"])
     pload = payload.ticket(ticket)
     crud = CRUDTicket()
-    dbticket = crud.read_ticket_by_id(db, pload["ticket_id"])
+    dbticket = crud.read_ticket_by_id(db, pload.ticket_id)
     if not dbticket:
         crud.create_ticket(db, pload)
     else:
