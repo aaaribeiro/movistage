@@ -124,11 +124,11 @@ class CRUDAgent:
 
 class CRUDTimeAppointment:
 
-    def read_time_appointment_by_id(db:Session, id: int):
+    def read_time_appointment_by_id(self, db:Session, id: int):
         return db.query(models.TimeAppointments).get(id)
 
 
-    def create_time_appointment(db: Session,
+    def create_time_appointment(self, db: Session,
                                 payload: schemas.TimeAppointment):
         dbtime = models.TimeAppointments(
             time_appointment_id = payload.time_appointment_id,
