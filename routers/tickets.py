@@ -22,7 +22,7 @@ router = APIRouter()
     "/tickets",
     tags=TAGS,
     response_model=List[schemas.TicketNestedCompany],
-    dependencies=[Depends(auth.api_token)]
+    # dependencies=[Depends(auth.api_token)]
 )
 async def read_tickets(skip: int = 0, limit: int = 100,
                     db:Session=Depends(get_db)):
