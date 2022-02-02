@@ -5,7 +5,7 @@ from os import urandom # logging config file
 
 # personal modules
 import utils
-
+from serializers.schemas import TicketNestedCompany, Agent, Organization
 # configuring logging hanlder for script
 # logging.config.fileConfig("logging.config")
 # logger = logging.getLogger(__name__)
@@ -38,19 +38,19 @@ def ticket(data):
 
     organization_id = data["clients"][0]["organization"]["id"]
     organization_name = data["clients"][0]["organization"]["businessName"]
-    organization = {
-        "organization_id": to_upper(organization_id),
-        "organization_name": to_upper(organization_name),
-    }
+    organization = Organization(
+        organization_id = to_upper(organization_id),
+        organization_name =  to_upper(organization_name),
+    )
 
     agent_id = data["owner"]["id"]
     agent_name = data["owner"]["businessName"]
     agent_team = data["ownerTeam"]
-    agent = {
-        "agent_id": to_upper(agent_id),
-        "agent_name": to_upper(agent_name),
-        "agent_team": to_upper(agent_team),
-    }
+    agent = Agent(
+        agent_id = to_upper(agent_id),
+        agent_name = to_upper(agent_name),
+        agent_team = to_upper(agent_team),
+    )
 
     ticket_id = data["id"]
     subject = data["subject"]
@@ -61,18 +61,18 @@ def ticket(data):
     sla_first_response = data["slaResponseDate"]
     sla_solution_date = data["slaSolutionDate"]
 
-    return {
-        "ticket_id": ticket_id,
-        "agent": agent,
-        "organization": organization,
-        "subject": to_upper(subject),
-        "category": to_upper(category),
-        "urgency": to_upper(urgency),
-        "status": to_upper(status),
-        "created_date": created_date,
-        "sla_first_response": sla_first_response, 
-        "sla_solution_date": sla_solution_date,
-    }
+    return TicketNestedCompany(
+        ticket_id = ticket_id,
+        agent = agent,
+        organization = organization,
+        subject = to_upper(subject),
+        category = to_upper(category),
+        urgency = to_upper(urgency),
+        status = to_upper(status),
+        created_date = created_date,
+        sla_first_response = sla_first_response, 
+        sla_solution_date = sla_solution_date,
+    )
 
 
 
