@@ -7,13 +7,14 @@ from fastapi import Depends, APIRouter, HTTPException, Request, status
 from sqlalchemy.orm import Session
 
 # required imports from package models
-from models import _crud
+from models.crud import CRUDTicket
 # from models.models import WebhookLogs 
 from serializers import schemas
 
 # required imports from packageutils 
+from utils import movidesk
+from utils import payload
 from utils.handlers import get_db
-from utils.movidesk import get_ticket
 
 # authentication
 from auth import auth
@@ -26,27 +27,23 @@ router = APIRouter()
 
 
 @router.post(
-    "/listener-new-ticket",
+    "/listener-ticket",
     tags=TAGS,
     status_code=status.HTTP_201_CREATED, 
     response_model=schemas.WebhookLog,
     # dependencies=[Depends(auth.api_token)],
 )
-async def create_new_ticket(request: Request, db: Session=Depends(get_db)):
+async def crud_ticket(request: Request, db: Session=Depends(get_db)):
 
     response = await request.json()
-    ticket = get_ticket(response["Id"])
-    print(ticket)
-    # webhook = schemas.WebhookLog(
-    #     ticket_id = response["Id"],
-    #     change = "NEW TICKET",
-    #     trigger_date = datetime.now(),
-    #     was_read = False
-    # )
-    # _crud.create_hook(db, webhook)
-    # webhook = crud.create_hook(db, webhook)
-    # return webhook
-
+    ticket = movidesk.get_ticket(response["Id"])
+    pload = payload.ticket(ticket)
+    crud = CRUDTicket()
+    dbticket = crud.read_ticket_by_id(db, pload["ticket_id"])
+    if not dbticket:
+        crud.create_ticket(db, pload)
+    else:
+        crud.update_ticket(db, pload, dbticket)
 
 # @router.post(
 #     "/hook/update/ticket",

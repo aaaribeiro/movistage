@@ -68,12 +68,13 @@ async def update_ticket(ticket_id: int, payload: schemas.TicketNestedCompany,
     """
 
     crud = CRUDTicket()
-    # read ticket from database and create a new one if not exists
-    ticket = crud.read_ticket_by_id(db, ticket_id)
-    if ticket:
-        crud.update_ticket(db, payload)  
-    else:
-        crud.create_ticket(db, payload, ticket)
+    # read ticket from database and raise an error if does not exists
+    dbticket = crud.read_ticket_by_id(db, ticket_id)
+    if not dbticket:
+        raise HTTPException(status_code=400, detail="ticket does not exist")
+
+    crud.update_ticket(db, payload, dbticket)  
+    
 
 
 @router.delete(
