@@ -135,6 +135,7 @@ class CRUDTimeAppointment:
             ticket_id = payload.ticket_id,
             agent_id = payload.agent_id,
             time_appointment = payload.time_appointment,
+            created_date = payload.created_date,
         )
         db.add(dbtime)
         db.commit()
@@ -148,6 +149,7 @@ class CRUDTimeAppointment:
         dbtime.agent_id = payload.agent_id
         dbtime.ticket_id = payload.ticket_id
         dbtime.time_appointment = payload.time_appointment
+        dbtime.created_date = payload.created_date
         db.commit()
 
 # def get_time_appointment_by_ticket_id(db: Session, ticket_id: int):
