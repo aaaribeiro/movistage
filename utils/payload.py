@@ -5,6 +5,7 @@
 
 # personal modules
 # import utils
+from venv import create
 from serializers.schemas import TicketNestedCompany, Agent, Organization, TimeAppointment
 # # @utils.debug
 # def company(data):
@@ -76,20 +77,22 @@ def appointments(data):
     appointments = []
  
     for action in data["actions"][::-1]:
+        
         if action["createdBy"]["profileType"] in (1, 3):
-            
+                
             time_appointment_id = action["timeAppointments"][0]["id"]
             ticket_id = data["id"]
             agent_id = action["timeAppointments"][0]["createdBy"]["id"]
             time_appointment = action["timeAppointments"][0]["workTime"]
+            created_date = action["createdDate"]
             
             appointment = TimeAppointment(
                 time_appointment_id = time_appointment_id,
                 ticket_id = ticket_id,
                 agent_id = _upper(agent_id),
-                time_appointment = _time(time_appointment)
+                time_appointment = _time(time_appointment),
+                created_date = created_date,
             )
-
             appointments.append(appointment)
 
     return appointments

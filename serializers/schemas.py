@@ -63,7 +63,8 @@ class TimeAppointment(BaseModel):
     ticket_id: Optional[int]
     agent_id: Optional[str]
     time_appointment: Optional[time]
-    
+    created_date: Optional[datetime]
+
     class Config:
         orm_mode = True
 
@@ -72,7 +73,8 @@ class AgentAppointment(BaseModel):
     time_appointment_id: Optional[int]
     agent: Optional[Agent] = None
     time_appointment: Optional[time]
-    
+    created_date: Optional[datetime]
+
     class Config:
         orm_mode = True
 
@@ -89,7 +91,8 @@ class TicketAppointment(BaseModel):
     time_appointment_id: Optional[int]
     ticket_id: Optional[int]
     time_appointment: Optional[time]
-    
+    created_date: Optional[datetime]
+
     class Config:
         orm_mode = True
 
@@ -141,12 +144,12 @@ class CreatedUser(BaseModel):
 #     class Config:
 #         orm_mode = True
 
-if __name__ == "__main__":
-    test = CreatedUser(
-        user_id = 1,
-        name = "Andre",
-        email = "andre@netcon"
-    )
-    print(test)
-    name = test.pop("name")
-    print(name)
+# if __name__ == "__main__":
+#     test = CreatedUser(
+#         user_id = 1,
+#         name = "Andre",
+#         email = "andre@netcon"
+#     )
+#     print(test)
+#     name = test.pop("name")
+#     print(name)

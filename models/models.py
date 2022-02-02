@@ -52,7 +52,6 @@ class Agents(Base):
     agent_id = Column(String, primary_key=True)
     agent_name = Column(String)
     agent_team = Column(String)
-
     # relationships
     tickets = relationship("Tickets", back_populates="agent")
     time_appointments = relationship("TimeAppointments", back_populates="agent")
@@ -65,8 +64,9 @@ class TimeAppointments(Base):
     time_appointment_id = Column(Integer, primary_key=True)
     ticket_id = Column(Integer, ForeignKey("mov_tickets.ticket_id"), nullable=False)
     agent_id = Column(String, ForeignKey("mov_agents.agent_id"), nullable=False)
+    created_date = Column(DateTime)
     time_appointment = Column(Time)
-
+    # relationships
     agent = relationship("Agents", back_populates="time_appointments")
 
 
