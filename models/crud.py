@@ -69,7 +69,7 @@ class CRUDTicket:
 
     def __check_agent(self, db: Session, payload: schemas.Agent):
         _crud = CRUDAgent()
-        _agent = _crud.read_agent_by_id(payload.organization_id)
+        _agent = _crud.read_agent_by_id(payload.agent_id)
         if not _agent:
             _crud.create_agent(db, payload)
 
