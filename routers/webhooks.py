@@ -27,11 +27,11 @@ router = APIRouter()
 @router.post(
     "/listener-ticket",
     tags=TAGS,
-    status_code=status.HTTP_201_CREATED, 
+    status_code=status.HTTP_200_OK, 
     # response_model=schemas.WebhookLog,
     # dependencies=[Depends(auth.api_token)],
 )
-async def crud_ticket(request: Request, db: Session=Depends(get_db)):
+async def create_update_ticket(request: Request, db: Session=Depends(get_db)):
 
     response = await request.json()
     ticket = movidesk.get_ticket(response["Id"])
@@ -48,7 +48,7 @@ async def crud_ticket(request: Request, db: Session=Depends(get_db)):
 @router.post(
     "/delete-ticket",
     tags=TAGS,
-    status_code=status.HTTP_204_NO_CONTENT,
+    status_code=status.HTTP_200_OK,
     # response_model=schemas.WebhookLog,
     # dependencies=[Depends(auth.api_token)],
 )
@@ -65,11 +65,11 @@ async def delete_ticket(request: Request, db: Session=Depends(get_db)):
 @router.post(
     "/listener-appointment",
     tags=TAGS,
-    status_code=status.HTTP_201_CREATED, 
+    status_code=status.HTTP_200_OK, 
     # response_model=schemas.WebhookLog,
     # dependencies=[Depends(auth.api_token)],
 )
-async def crud_appointment(request: Request, db: Session=Depends(get_db)):
+async def crud_update_appointment(request: Request, db: Session=Depends(get_db)):
 
     response = await request.json()
     ticket = movidesk.get_ticket(response["Id"])
