@@ -1,7 +1,7 @@
 # built-in libraries
 
 # imports from third-party libraries
-from fastapi import Depends, APIRouter, Request, status
+from fastapi import Depends, APIRouter, Request, Response, status
 from sqlalchemy.orm import Session
 
 # required imports from package models
@@ -48,7 +48,7 @@ async def crud_ticket(request: Request, db: Session=Depends(get_db)):
 @router.post(
     "/delete-ticket",
     tags=TAGS,
-    status_code=status.HTTP_204_NO_CONTENT, 
+    # status_code=status.HTTP_204_NO_CONTENT, 
     # response_model=schemas.WebhookLog,
     # dependencies=[Depends(auth.api_token)],
 )
@@ -58,6 +58,7 @@ async def delete_ticket(request: Request, db: Session=Depends(get_db)):
     ticket_id = response["Id"]
     crud = CRUDTicket()
     crud.delete_ticket(db, ticket_id)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 
