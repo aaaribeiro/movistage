@@ -25,7 +25,7 @@ router = APIRouter()
 
 
 @router.post(
-    "/listener-ticket",
+    "/createupdate-ticket",
     tags=TAGS,
     status_code=status.HTTP_200_OK, 
     # response_model=schemas.WebhookLog,
@@ -63,13 +63,13 @@ async def delete_ticket(request: Request, db: Session=Depends(get_db)):
 
 
 @router.post(
-    "/listener-appointment",
+    "/createupdate-appointment",
     tags=TAGS,
     status_code=status.HTTP_200_OK, 
     # response_model=schemas.WebhookLog,
     # dependencies=[Depends(auth.api_token)],
 )
-async def crud_update_appointment(request: Request, db: Session=Depends(get_db)):
+async def create_update_appointment(request: Request, db: Session=Depends(get_db)):
 
     response = await request.json()
     ticket = movidesk.get_ticket(response["Id"])
@@ -77,6 +77,9 @@ async def crud_update_appointment(request: Request, db: Session=Depends(get_db))
     crud = CRUDTimeAppointment()
     for appointment in pload:
         dbappointment = crud.read_time_appointment_by_id(db,
-                                                    appointment.time_appointment_id)
+                                                appointment.time_appointment_id)
         if not dbappointment:
             crud.create_time_appointment(db, appointment)
+        else:
+            if appointment.time_appointment != dbappointment.time_appointment:
+                crud.update_time_appointment(db, appointment, dbappointment)
