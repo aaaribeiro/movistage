@@ -79,7 +79,7 @@ def appointments(data):
     for action in data["actions"][::-1]:
         
         if action["createdBy"]["profileType"] in (1, 3):
-                
+
             time_appointment_id = action["timeAppointments"][0]["id"]
             ticket_id = data["id"]
             agent_id = action["timeAppointments"][0]["createdBy"]["id"]

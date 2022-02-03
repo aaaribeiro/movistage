@@ -46,6 +46,22 @@ async def crud_ticket(request: Request, db: Session=Depends(get_db)):
 
 
 @router.post(
+    "/delete-ticket",
+    tags=TAGS,
+    status_code=status.HTTP_204_NO_CONTENT, 
+    # response_model=schemas.WebhookLog,
+    # dependencies=[Depends(auth.api_token)],
+)
+async def delete_ticket(request: Request, db: Session=Depends(get_db)):
+
+    response = await request.json()
+    ticket_id = response["Id"]
+    crud = CRUDTicket()
+    crud.delete_ticket(db, ticket_id)
+
+
+
+@router.post(
     "/listener-appointment",
     tags=TAGS,
     status_code=status.HTTP_201_CREATED, 
