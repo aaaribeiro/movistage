@@ -47,8 +47,8 @@ async def create_time_appointment(payload: schemas.TimeAppointment,
     Write something
     """
 
-    ticket_crud = CRUDTicket()
-    ticket_payload = 
+    # ticket_crud = CRUDTicket()
+    # ticket_payload = 
     
     crud = CRUDTimeAppointment()
     # raise an error HTTP_400 if time already registered
