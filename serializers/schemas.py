@@ -45,10 +45,10 @@ class Organization(BaseModel):
 class TicketAppointment(BaseModel):
     time_appointment_id: Optional[int]
     ticket_id: Optional[int]
-    agent: Optional[Agent] = None
     time_appointment: Optional[time]
     created_date: Optional[datetime]
-
+    agent: Optional[Agent] = None
+    
     class Config:
         orm_mode = True
 
