@@ -47,8 +47,9 @@ class TicketAppointment(BaseModel):
     ticket_id: Optional[int]
     time_appointment: Optional[time]
     created_date: Optional[datetime]
-    agent: Optional[Agent] = None
-    
+    agent_id : Optional[str]
+    # agent: Optional[Agent] = None
+
     class Config:
         orm_mode = True
 
@@ -65,7 +66,7 @@ class TicketNestedCompany(BaseModel):
     subject: Optional[str]
     sla_solution_date: Optional[datetime]
     sla_first_response: Optional[datetime]
-    time_appointments: List[TicketAppointment] = None
+    appointments: List[TicketAppointment] = None
 
     class Config:
         orm_mode = True

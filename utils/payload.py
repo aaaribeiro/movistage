@@ -88,6 +88,7 @@ def ticket(data):
         created_date = created_date,
         sla_first_response = sla_first_response, 
         sla_solution_date = sla_solution_date,
+        appointments = appointments,
     )
 
 

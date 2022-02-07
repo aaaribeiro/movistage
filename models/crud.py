@@ -1,5 +1,6 @@
 import uuid
 
+from typing import List
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.expression import func
 
@@ -26,7 +27,33 @@ class CRUDTicket:
         _organization = payload.organization
         self._create_organization(db, _organization)
 
-        self._create_or_updadte_ticket(db, payload)
+        dbticket = self.read_ticket_by_id(db, payload.ticket_id)        
+        if not dbticket:
+            ticket = models.Tickets(
+                ticket_id = payload.ticket_id,
+                organization_id = payload.organization.organization_id,
+                agent_id = payload.agent.agent_id,
+                status = payload.status,
+                category = payload.category,
+                urgency = payload.urgency,
+                subject = payload.subject,
+                created_date = payload.created_date,
+                sla_solution_date = payload.sla_solution_date,
+                sla_first_response = payload.sla_first_response,
+            )
+            db.add(ticket)
+        else:
+            dbticket.organization_id = payload.organization.organization_id
+            dbticket.agent_id = payload.agent.agent_id
+            dbticket.status = payload.status
+            dbticket.category = payload.category
+            dbticket.urgency = payload.urgency
+            dbticket.subject = payload.subject
+            dbticket.created_date = payload.created_date
+            dbticket.sla_first_response = payload.sla_first_response
+            dbticket.sla_solution_date = payload.sla_solution_date
+        
+        db.commit()
 
 
     def delete_ticket(self, db: Session, id: int):
@@ -54,36 +81,43 @@ class CRUDTicket:
             crud.create_organization(db, payload)
 
 
-    def _create_or_updadte_ticket(self, db:Session, payload: schemas.TicketNestedCompany):
+    def _create_or_update_appointments(self, db:Session,
+                                    payload: List[schemas.TicketAppointment]):
+        crud = CRUDTimeAppointment()
+        for appointment in payload:
+            crud.create_or_update_time_appointment(db, appointment)
 
-        dbticket = self.read_ticket_by_id(db, payload.ticket_id)
+
+    # def _create_or_updadte_ticket(self, db:Session, payload: schemas.TicketNestedCompany):
+
+    #     dbticket = self.read_ticket_by_id(db, payload.ticket_id)
         
-        if not dbticket:
-            ticket = models.Tickets(
-                ticket_id = payload.ticket_id,
-                organization_id = payload.organization.organization_id,
-                agent_id = payload.agent.agent_id,
-                status = payload.status,
-                category = payload.category,
-                urgency = payload.urgency,
-                subject = payload.subject,
-                created_date = payload.created_date,
-                sla_solution_date = payload.sla_solution_date,
-                sla_first_response = payload.sla_first_response,
-            )
-            db.add(ticket)
-        else:
-            dbticket.organization_id = payload.organization.organization_id
-            dbticket.agent_id = payload.agent.agent_id
-            dbticket.status = payload.status
-            dbticket.category = payload.category
-            dbticket.urgency = payload.urgency
-            dbticket.subject = payload.subject
-            dbticket.created_date = payload.created_date
-            dbticket.sla_first_response = payload.sla_first_response
-            dbticket.sla_solution_date = payload.sla_solution_date
+    #     if not dbticket:
+    #         ticket = models.Tickets(
+    #             ticket_id = payload.ticket_id,
+    #             organization_id = payload.organization.organization_id,
+    #             agent_id = payload.agent.agent_id,
+    #             status = payload.status,
+    #             category = payload.category,
+    #             urgency = payload.urgency,
+    #             subject = payload.subject,
+    #             created_date = payload.created_date,
+    #             sla_solution_date = payload.sla_solution_date,
+    #             sla_first_response = payload.sla_first_response,
+    #         )
+    #         db.add(ticket)
+    #     else:
+    #         dbticket.organization_id = payload.organization.organization_id
+    #         dbticket.agent_id = payload.agent.agent_id
+    #         dbticket.status = payload.status
+    #         dbticket.category = payload.category
+    #         dbticket.urgency = payload.urgency
+    #         dbticket.subject = payload.subject
+    #         dbticket.created_date = payload.created_date
+    #         dbticket.sla_first_response = payload.sla_first_response
+    #         dbticket.sla_solution_date = payload.sla_solution_date
         
-        db.commit()
+    #     db.commit()
 
 
 class CRUDOrganization:
@@ -136,16 +170,26 @@ class CRUDTimeAppointment:
                 all()
 
 
-    def create_time_appointment(self, db: Session,
+    def create_or_update_time_appointment(self, db: Session,
                                 payload: schemas.TimeAppointment):
-        dbtime = models.TimeAppointments(
-            time_appointment_id = payload.time_appointment_id,
-            ticket_id = payload.ticket_id,
-            agent_id = payload.agent_id,
-            time_appointment = payload.time_appointment,
-            created_date = payload.created_date,
-        )
-        db.add(dbtime)
+        dbtime = self.read_time_appointment_by_id(db,
+                                                payload.time_appointment_id)
+        if not dbtime:
+            dbtime = models.TimeAppointments(
+                time_appointment_id = payload.time_appointment_id,
+                ticket_id = payload.ticket_id,
+                agent_id = payload.agent_id,
+                time_appointment = payload.time_appointment,
+                created_date = payload.created_date,
+            )
+            db.add(dbtime)
+        else:
+            dbtime.time_appointment_id = payload.time_appointment_id
+            dbtime.agent_id = payload.agent_id
+            dbtime.ticket_id = payload.ticket_id
+            dbtime.time_appointment = payload.time_appointment
+            dbtime.created_date = payload.created_date    
+
         db.commit()
 
 
