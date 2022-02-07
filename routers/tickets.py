@@ -46,12 +46,13 @@ async def create_ticket(payload: schemas.TicketNestedCompany,
     """
 
     crud = CRUDTicket()
+    
     # read ticket from database and raise an error if ticket exist
-    dbticket = crud.read_ticket_by_id(db, payload.ticket_id) 
+    dbticket = crud.read_ticket_by_id(db, payload.ticket_id)  
     if dbticket:
         raise HTTPException(status_code=400, detail="ticket already exists")
 
-    crud.create_ticket(db, payload)
+    crud.create_or_update_ticket(db, payload)
 
 
 @router.put(
@@ -68,12 +69,13 @@ async def update_ticket(ticket_id: int, payload: schemas.TicketNestedCompany,
     """
 
     crud = CRUDTicket()
+    
     # read ticket from database and raise an error if does not exists
     dbticket = crud.read_ticket_by_id(db, ticket_id)
     if not dbticket:
         raise HTTPException(status_code=400, detail="ticket does not exist")
 
-    crud.update_ticket(db, payload, dbticket)  
+    crud.create_or_update_ticket(db, payload, dbticket)  
     
 
 
@@ -86,6 +88,8 @@ async def update_ticket(ticket_id: int, payload: schemas.TicketNestedCompany,
 async def delete_ticket(ticket_id: int, db: Session = Depends(get_db)):
 
     crud = CRUDTicket()
+    
+    # read ticket and delete it
     dbticket = crud.read_ticket_by_id(db, ticket_id)
     if not dbticket:
         raise HTTPException(status_code=404, detail="ticket not found")

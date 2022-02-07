@@ -18,47 +18,15 @@ class CRUDTicket:
         return db.query(models.Tickets).get(id)
     
 
-    def create_ticket(self, db: Session, payload: schemas.TicketNestedCompany):
+    def create_or_update_ticket(self, db: Session,
+                                payload: schemas.TicketNestedCompany):
         _agent = payload.agent
-        self.__check_agent(db, _agent)
+        self._create_agent(db, _agent)
         
         _organization = payload.organization
-        self.__check_organization(db, _organization)
+        self._create_organization(db, _organization)
 
-        ticket = models.Tickets(
-            ticket_id = payload.ticket_id,
-            organization_id = payload.organization.organization_id,
-            agent_id = payload.agent.agent_id,
-            status = payload.status,
-            category = payload.category,
-            urgency = payload.urgency,
-            subject = payload.subject,
-            created_date = payload.created_date,
-            sla_solution_date = payload.sla_solution_date,
-            sla_first_response = payload.sla_first_response,
-        )
-        db.add(ticket)
-        db.commit()
-
-
-    def update_ticket(self, db: Session, payload: schemas.TicketNestedCompany,
-                        dbticket: models.Tickets):
-        _agent = payload.agent
-        self.__check_agent(db, _agent)
-        
-        _organization = payload.organization
-        self.__check_organization(db, _organization)
-
-        dbticket.organization_id = payload.organization.organization_id
-        dbticket.agent_id = payload.agent.agent_id
-        dbticket.status = payload.status
-        dbticket.category = payload.category
-        dbticket.urgency = payload.urgency
-        dbticket.subject = payload.subject
-        dbticket.created_date = payload.created_date
-        dbticket.sla_first_response = payload.sla_first_response
-        dbticket.sla_solution_date = payload.sla_solution_date
-        db.commit()
+        self._create_or_updadte_ticket(db, payload)
 
 
     def delete_ticket(self, db: Session, id: int):
@@ -70,21 +38,52 @@ class CRUDTicket:
         db.commit()
 
 
-    def __check_agent(self, db: Session, payload: schemas.Agent):
-        _crud = CRUDAgent()
-        _agent = _crud.read_agent_by_id(db, payload.agent_id)
-        if not _agent:
-            _crud.create_agent(db, payload)
+    def _create_agent(self, db: Session, payload: schemas.Agent):
+        crud = CRUDAgent()
+        agent = crud.read_agent_by_id(db, payload.agent_id)
+        if not agent:
+            crud.create_agent(db, payload)
 
 
-    def __check_organization(self, db: Session,
+    def _create_organization(self, db: Session,
                             payload: schemas.Organization):
-        _crud = CRUDOrganization()
-        _organization = _crud.read_organization_by_id(db,
+        crud = CRUDOrganization()
+        organization = crud.read_organization_by_id(db,
                                                     payload.organization_id)
-        if not _organization:
-            _crud.create_organization(db, payload)
+        if not organization:
+            crud.create_organization(db, payload)
 
+
+    def _create_or_updadte_ticket(self, db:Session, payload: schemas.TicketNestedCompany):
+
+        dbticket = self.read_ticket_by_id(db, payload.ticket_id)
+        
+        if not dbticket:
+            ticket = models.Tickets(
+                ticket_id = payload.ticket_id,
+                organization_id = payload.organization.organization_id,
+                agent_id = payload.agent.agent_id,
+                status = payload.status,
+                category = payload.category,
+                urgency = payload.urgency,
+                subject = payload.subject,
+                created_date = payload.created_date,
+                sla_solution_date = payload.sla_solution_date,
+                sla_first_response = payload.sla_first_response,
+            )
+            db.add(ticket)
+        else:
+            dbticket.organization_id = payload.organization.organization_id
+            dbticket.agent_id = payload.agent.agent_id
+            dbticket.status = payload.status
+            dbticket.category = payload.category
+            dbticket.urgency = payload.urgency
+            dbticket.subject = payload.subject
+            dbticket.created_date = payload.created_date
+            dbticket.sla_first_response = payload.sla_first_response
+            dbticket.sla_solution_date = payload.sla_solution_date
+        
+        db.commit()
 
 
 class CRUDOrganization:
@@ -167,6 +166,7 @@ class CRUDTimeAppointment:
         for dbtime in dbtimes:
             db.delete(dbtime)
         db.commit()
+
 
 # def get_time_appointment_by_ticket_id(db: Session, ticket_id: int):
 #     return db.query(models.TimeAppointments).filter(

@@ -39,7 +39,7 @@ def read_time_appointments_by_agent(skip: int = 0, limit: int = 100,
     "/timeappointments",
     tags=TAGS,
     status_code=status.HTTP_201_CREATED, 
-    dependencies=[Depends(auth.api_token)],
+    # dependencies=[Depends(auth.api_token)],
 )
 async def create_time_appointment(payload: schemas.TimeAppointment,
                                 db: Session=Depends(get_db)):
@@ -47,6 +47,9 @@ async def create_time_appointment(payload: schemas.TimeAppointment,
     Write something
     """
 
+    ticket_crud = CRUDTicket()
+    ticket_payload = 
+    
     crud = CRUDTimeAppointment()
     # raise an error HTTP_400 if time already registered
     time = crud.read_time_appointment_by_id(payload.time_appointment_id)

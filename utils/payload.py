@@ -79,20 +79,22 @@ def appointments(data):
     for action in data["actions"][::-1]:
         
         if action["createdBy"]["profileType"] in (1, 3):
-
-            time_appointment_id = int(f"{data['id']}" + f"{action['id']:03}")
-            ticket_id = data["id"]
-            agent_id = action["timeAppointments"][0]["createdBy"]["id"]
-            time_appointment = action["timeAppointments"][0]["workTime"]
-            created_date = action["createdDate"]
+            try:
+                time_appointment_id = int(f"{data['id']}" + f"{action['id']:03}")
+                ticket_id = data["id"]
+                agent_id = action["timeAppointments"][0]["createdBy"]["id"]
+                time_appointment = action["timeAppointments"][0]["workTime"]
+                created_date = action["createdDate"]
+                
+                appointment = TimeAppointment(
+                    time_appointment_id = time_appointment_id,
+                    ticket_id = ticket_id,
+                    agent_id = _upper(agent_id),
+                    time_appointment = _time(time_appointment),
+                    created_date = created_date,
+                )
+                appointments.append(appointment)
+            except IndexError:
+                continue
             
-            appointment = TimeAppointment(
-                time_appointment_id = time_appointment_id,
-                ticket_id = ticket_id,
-                agent_id = _upper(agent_id),
-                time_appointment = _time(time_appointment),
-                created_date = created_date,
-            )
-            appointments.append(appointment)
-
     return appointments

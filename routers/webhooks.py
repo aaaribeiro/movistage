@@ -73,6 +73,8 @@ async def create_update_appointment(request: Request, db: Session=Depends(get_db
 
     response = await request.json()
     ticket = movidesk.get_ticket(response["Id"])
+    # pload = payload.ticket(ticket)
+    # crud = CRUDTicket()
     pload = payload.appointments(ticket)
     crud = CRUDTimeAppointment()
     for appointment in pload:
