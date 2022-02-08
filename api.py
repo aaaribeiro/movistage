@@ -61,8 +61,8 @@ def startup_event():
 
 app.include_router(tickets.router, prefix=PREFIX)
 # app.include_router(organizations.router, prefix=PREFIX)
-app.include_router(time_appointments.router, prefix=PREFIX)
-app.include_router(webhooks.router, prefix=PREFIX)
+# app.include_router(time_appointments.router, prefix=PREFIX)
+# app.include_router(webhooks.router, prefix=PREFIX)
 # app.include_router(users.router, prefix=PREFIX)
 
 
