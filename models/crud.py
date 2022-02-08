@@ -58,7 +58,12 @@ class CRUDTicket:
 
 
 class CRUDOrganization:
-    
+
+    def readOrganizations(self, db: Session, skip: int=0, limit: int=100):
+        return db.query(models.Organizations).\
+            offset(skip).limit(limit).all()
+
+
     def readOrganizationById(self, db: Session, id: str):
         return db.query(models.Organizations).get(id)
        
@@ -77,6 +82,11 @@ class CRUDOrganization:
         dbOrganization.organization_name = payload.organization_name
         db.commit()
 
+
+    def deleteOrganization(self, db: Session, id: int):
+        dbOrganization = self.readOrganizationById(db, id)
+        db.delete(dbOrganization)
+        db.commit()
 
 
 class CRUDAgent:

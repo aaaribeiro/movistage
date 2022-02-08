@@ -31,6 +31,7 @@ async def read_tickets(skip: int = 0, limit: int = 100,
     return crud.readTickets(db, skip, limit)
 
 
+
 @router.post(
     "/tickets",
     tags=TAGS,
@@ -43,6 +44,7 @@ async def create_ticket(payload: schemas.Ticket, db: Session=Depends(get_db)):
     if dbTicket:
         raise HTTPException(status_code=400, detail="ticket already exists")
     crud.createTicket(db, payload)
+
 
 
 @router.put(
@@ -75,40 +77,3 @@ async def delete_ticket(id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="ticket not found")
     crud.deleteTicket(db, id)
     
-
-# @router.get(
-#     "/tickets/{ticket_id}",
-#     tags=TAGS,
-#     response_model=schemas.TicketNestedCompany,
-#     dependencies=[Depends(auth.api_token)]
-# )
-# async def read_ticket(ticket_id, db: Session=Depends(get_db)):
-#     """
-#     Returns a ticket object from movidesk stage
-#     """
-#     ticket = crud.get_ticket_by_id(db, id=ticket_id)
-#     if not ticket:
-#         raise HTTPException(status_code=400, detail="Ticket does not exists")
-#     return ticket
-
-# @router.patch(
-#     "/tickets/{ticket_id}",
-#     tags=TAGS,
-#     status_code=status.HTTP_204_NO_CONTENT, 
-#     dependencies=[Depends(auth.api_token)],
-# )
-# async def update_ticket(ticket_id: str, ticket: schemas.Ticket, token:str=None,
-#                         db: Session = Depends(get_db)):
-#     """
-#     Partial update from a ticket object
-#     """
-#     stored_ticket = crud.get_ticket_by_id(db, id=ticket_id)
-#     if not stored_ticket:
-#         raise HTTPException(status_code=404, detail="Ticket Not Found")
-    
-#     crud.partial_update_ticket(
-#         db,
-#         id=ticket_id,
-#         ticket=ticket
-#     )
-        
