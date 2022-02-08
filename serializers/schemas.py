@@ -75,7 +75,7 @@ class TicketNestedCompany(BaseModel):
     subject: Optional[str]
     sla_solution_date: Optional[datetime]
     sla_first_response: Optional[datetime]
-    appointments: List[TimeAppointment] = None
+    time_appointments: List[TimeAppointment] = None
 
     class Config:
         orm_mode = True
