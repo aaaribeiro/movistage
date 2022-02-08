@@ -47,8 +47,7 @@ class TicketAppointment(BaseModel):
     ticket_id: Optional[int]
     time_appointment: Optional[time]
     created_date: Optional[datetime]
-    agent_id : Optional[str]
-    # agent: Optional[Agent] = None
+    # agent_id : Optional[str]
 
     class Config:
         orm_mode = True
