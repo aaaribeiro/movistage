@@ -29,7 +29,7 @@ class Tickets(Base):
     sla_solution_date = Column(DateTime)
     sla_first_response = Column(DateTime)
     # relationships
-    time_appointments = relationship("TimeAppointments")
+    appointments = relationship("TimeAppointments")
     organization =  relationship("Organizations", back_populates="tickets")
     agent = relationship("Agents", back_populates="tickets")
 
