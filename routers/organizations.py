@@ -15,7 +15,7 @@ from utils.handlers import get_db
 from auth import auth
 
 # constants
-TAGS = ["Organizations",]
+TAGS = ["organizations",]
 
 router = APIRouter()
 
