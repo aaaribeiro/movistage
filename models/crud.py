@@ -9,7 +9,7 @@ from serializers import schemas
 
 
 class CRUDTicket:
-
+    
     def readTickets(self, db: Session, skip: int=0, limit: int=100):
         return db.query(models.Tickets).\
             offset(skip).limit(limit).all()
@@ -54,7 +54,6 @@ class CRUDTicket:
         dbTicket = self.readTicketById(db, id)
         db.delete(dbTicket)
         db.commit()
-
 
 
 class CRUDOrganization:

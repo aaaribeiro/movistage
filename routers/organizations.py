@@ -34,7 +34,7 @@ async def read_organizations(skip: int = 0, limit: int = 100,
 
 
 @router.post(
-    "/organization",
+    "/organizations",
     tags=TAGS,
     status_code=status.HTTP_201_CREATED, 
     # dependencies=[Depends(auth.api_token)],
@@ -49,27 +49,31 @@ async def create_organization(payload: schemas.Organization,
 
 
 
-# @router.delete(
-#     "/organization/{client_id}",
-#     tags=TAGS,
-#     response_model=schemas.Organization,
-#     dependencies=[Depends(auth.api_token)],
-# )
-# async def delete_organization(client_id = str, token: str = None,
-#                                 db: Session = Depends(get_db)):
-#     """
-#     Option to delete an object organization from movidesk stage
-#     """
-#     stored_organization = _crud.get_customer_by_id(db, id=client_id)
-#     if not stored_organization:
-#         raise HTTPException(status_code=404, detail="Organization Not Found")
-    
-#     deleted_organization = _crud.delete_organization(db, id=client_id)
-    
-#     if not deleted_organization:
-#         raise HTTPException(
-#             status_code=400,
-#             detail="Could Not Possible Delete Organization"
-#         )
-    
-#     return stored_organization
+@router.put(
+    "/organizations/{id}",
+    tags=TAGS,
+    status_code=status.HTTP_204_NO_CONTENT,
+    # dependencies=[Depends(auth.api_token)],
+)
+async def update_organization(id: int, payload: schemas.Organization, 
+                        db: Session = Depends(get_db)):
+    crud = CRUDOrganization()
+    dbOrganization = crud.readOrganizationById(db, id)
+    if not dbOrganization:
+        raise HTTPException(status_code=404, detail="organization not found")
+    crud.updateOrganization(db, payload, dbOrganization) 
+
+
+
+@router.delete(
+    "/organizations/{id}",
+    tags=TAGS,
+    status_code=status.HTTP_204_NO_CONTENT,
+    # dependencies=[Depends(auth.api_token)],
+)
+async def delete_organization(id: str, db: Session = Depends(get_db)):
+    crud = CRUDOrganization()
+    dbOrganization = crud.readOrganizationById(db, id)
+    if not dbOrganization:
+        raise HTTPException(status_code=404, detail="organization not found")
+    crud.deleteOrganization(db, id)
