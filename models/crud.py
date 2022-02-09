@@ -116,6 +116,12 @@ class CRUDAgent:
         db.commit()
 
 
+    def deleteAgent(self, db: Session, id: int):
+        dbAgent = self.readAgentById(db, id)
+        db.delete(dbAgent)
+        db.commit()
+
+
 
 class CRUDTimeAppointment:
 
