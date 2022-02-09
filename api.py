@@ -14,7 +14,7 @@ from models.database import engine
 # from sqlalchemy.orm import Session
 
 # required imports from utils package
-from routers import organizations, tickets, time_appointments, webhooks, users
+from routers import agents, appointments, organizations, tickets, webhooks, users
 # from auth import auth
 
 ################## constants ####################
@@ -61,7 +61,7 @@ def startup_event():
 
 app.include_router(tickets.router, prefix=PREFIX)
 app.include_router(organizations.router, prefix=PREFIX)
-# app.include_router(time_appointments.router, prefix=PREFIX)
+app.include_router(agents.router, prefix=PREFIX)
 # app.include_router(webhooks.router, prefix=PREFIX)
 # app.include_router(users.router, prefix=PREFIX)
 
