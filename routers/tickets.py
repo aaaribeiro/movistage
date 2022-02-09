@@ -54,11 +54,11 @@ async def create_ticket(payload: schemas.Ticket, db: Session=Depends(get_db)):
     # dependencies=[Depends(auth.api_token)],
 )
 async def update_ticket(id: int, payload: schemas.Ticket, 
-                        db: Session = Depends(get_db), ):
+                        db: Session = Depends(get_db)):
     crud = CRUDTicket()
     dbTicket = crud.readTicketById(db, id)
     if not dbTicket:
-        raise HTTPException(status_code=400, detail="ticket does not exist")
+        raise HTTPException(status_code=404, detail="ticket not found")
     crud.updateTicket(db, payload, dbTicket)  
     
 
@@ -70,10 +70,8 @@ async def update_ticket(id: int, payload: schemas.Ticket,
     # dependencies=[Depends(auth.api_token)],
 )
 async def delete_ticket(id: int, db: Session = Depends(get_db)):
-
     crud = CRUDTicket()
     dbTicket = crud.readTicketById(db, id)
     if not dbTicket:
         raise HTTPException(status_code=404, detail="ticket not found")
     crud.deleteTicket(db, id)
-    
