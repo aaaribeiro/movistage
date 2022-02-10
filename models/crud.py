@@ -129,10 +129,10 @@ class CRUDTimeAppointment:
         return db.query(models.TimeAppointments).get(id)
 
     
-    # def readTimeAppointmentsByTicketId(self, db:Session, id: int):
-    #     return db.query(models.TimeAppointments).\
-    #             filter(models.TimeAppointments.ticket_id == id).\
-    #             all()
+    def readTimeAppointmentsByTicketId(self, db:Session, id: int):
+        return db.query(models.TimeAppointments).\
+                filter(models.TimeAppointments.ticket_id == id).\
+                all()
 
 
     def createTimeAppointment(self, db: Session,
@@ -148,11 +148,11 @@ class CRUDTimeAppointment:
         db.commit()
 
 
-    # def delete_time_appointments_by_ticket_id(self, db: Session, id: int):
-    #     dbtimes = self.read_time_appointments_by_ticket_id(db, id)
-    #     for dbtime in dbtimes:
-    #         db.delete(dbtime)
-    #     db.commit()
+    def deleteTimeAppointmentsByTicketId(self, db: Session, id: int):
+        dbAppointments = self.readTimeAppointmentsByTicketId(db, id)
+        for dbAppointment in dbAppointments:
+            db.delete(dbAppointment)
+        db.commit()
 
 
 # class Crud(CRUDAgent, CRUDOrganization, CRUDTimeAppointment, CRUDTicket):
