@@ -26,13 +26,12 @@ router = APIRouter()
 @router.post(
     "/tickets/createupdate",
     tags=TAGS,
-    status_code=status.HTTP_204_NO_CONTENT,
+    status_code=status.HTTP_200_OK,
     # dependencies=[Depends(auth.api_token)],
 )
 async def create_update_ticket(request: Request, response: Response,
                                 db: Session=Depends(get_db)):
     resp = await request.json()
-    
     ticket = movidesk.get_ticket(resp["Id"])
     ploadTicket = payload.ticket(ticket)
 
