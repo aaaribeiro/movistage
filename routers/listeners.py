@@ -34,12 +34,15 @@ async def create_update_ticket(request: Request, response: Response,
     response = await request.json()
     
     ticket = movidesk.get_ticket(response["Id"])
+    ploadTicket = payload.ticket(ticket)
+
+    organization = movidesk.get_ticket(ploadTicket.organization_id)
+    ploadOrg = payload.organization(organization)
+    
     appointments = [f"{response['Id']}{x['Id']}" for x in response["Actions"]]
     print(appointments)
-    ploadTicket = payload.ticket(ticket)
-    ploadOrg = ploadTicket.organization
+    
     crudTicket, crudOrg = CRUDTicket(), CRUDOrganization()
-   
     dbOrg = crudOrg.readOrganizationById(db, ploadOrg.organization_id)
     if not dbOrg:
         crudOrg.createOrganization(db, ploadOrg)
