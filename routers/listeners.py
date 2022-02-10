@@ -39,7 +39,7 @@ async def create_update_ticket(request: Request, response: Response,
     organization = movidesk.get_organization(ploadTicket.organization_id)
     ploadOrg = payload.organization(organization)
     
-    appointments = [f"{response['Id']}{x['Id']}" for x in resp["Actions"]]
+    appointments = [f"{resp['Id']}{x['Id']}" for x in resp["Actions"]]
     print(appointments)
 
     crudTicket, crudOrg = CRUDTicket(), CRUDOrganization()
