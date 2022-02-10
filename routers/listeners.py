@@ -32,21 +32,24 @@ router = APIRouter()
 async def create_update_ticket(request: Request, response: Response,
                                 db: Session=Depends(get_db)):
     resp = await request.json()
+    # crud objects
     crudTicket = CRUDTicket()
     crudOrg = CRUDOrganization()
-    crudAppointment = CRUDTimeAppointment()
+    # crudAppointment = CRUDTimeAppointment()
+    
+    # ticket/payload movidesk
     ticket = movidesk.get_ticket(resp["Id"])
     ploadTicket = payload.ticket(ticket)
-
+   # organization/paylod movidesk
     organization = movidesk.get_organization(ploadTicket.organization_id)
     ploadOrg = payload.organization(organization)
     
-    if resp['Actions'][0]["CreatedBy"]["ProfileType"] in (1, 3):
-        appointmentId = int(f"{resp['Id']}{resp['Actions'][0]['Id']}")
-        dbAppointment = crudAppointment.readTimeAppointmentById(db,
-                                                                appointmentId)
-        if not dbAppointment:
-            print("this function must create a new appointment in db")
+    # if resp['Actions'][0]["CreatedBy"]["ProfileType"] in (1, 3):
+    #     appointmentId = int(f"{resp['Id']}{resp['Actions'][0]['Id']}")
+    #     dbAppointment = crudAppointment.readTimeAppointmentById(db,
+    #                                                             appointmentId)
+    #     if not dbAppointment:
+    #         print("this function must create a new appointment in db")
     
     dbOrg = crudOrg.readOrganizationById(db, ploadOrg.organization_id)
     if not dbOrg:
@@ -80,26 +83,31 @@ async def delete_ticket(request: Request, db: Session=Depends(get_db)):
         crudTicket.deleteTicket(db, ticketId)
 
 
-# @router.post(
-#     "/createupdate-appointment",
-#     tags=TAGS,
-#     status_code=status.HTTP_200_OK, 
-#     # response_model=schemas.WebhookLog,
-#     # dependencies=[Depends(auth.api_token)],
-# )
-# async def create_update_appointment(request: Request, db: Session=Depends(get_db)):
 
-#     response = await request.json()
-#     ticket = movidesk.get_ticket(response["Id"])
-#     # pload = payload.ticket(ticket)
-#     # crud = CRUDTicket()
-#     pload = payload.appointments(ticket)
-#     crud = CRUDTimeAppointment()
-#     for appointment in pload:
-#         dbappointment = crud.read_time_appointment_by_id(db,
-#                                                 appointment.time_appointment_id)
-#         if not dbappointment:
-#             crud.create_time_appointment(db, appointment)
-#         else:
-#             if appointment.time_appointment != dbappointment.time_appointment:
-#                 crud.update_time_appointment(db, appointment, dbappointment)
+@router.post(
+    "/appointments/createupdate",
+    tags=TAGS,
+    status_code=status.HTTP_200_OK,
+    # dependencies=[Depends(auth.api_token)],
+)
+async def create_update_appointment(request: Request, response: Response,
+                                db: Session=Depends(get_db)):
+
+    resp = await request.json()
+    ticketID = resp["Id"]
+    actionID = resp["Actions"][0]["Id"]
+
+    # crud objects
+    crudAppointment = CRUDTimeAppointment()
+    
+    # ticket/payload movidesk
+    ticket = movidesk.get_ticket(resp["Id"])
+    
+    if resp['Actions'][0]["CreatedBy"]["ProfileType"] in (1, 3):
+        appointmentId = int(f"{ticketID}"+f"{actionID:03}")
+        dbAppointment = crudAppointment.readTimeAppointmentById(db,
+                                                                appointmentId)
+        if not dbAppointment:
+            ploadTicket = payload.appointments(ticket, actionID)
+            crudAppointment.createTimeAppointment(db, ploadTicket)
+            response.status_code = status.HTTP_201_CREATED
