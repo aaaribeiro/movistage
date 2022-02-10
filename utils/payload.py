@@ -37,7 +37,9 @@ def ticket(data):
     #     organization_name =  _upper(organization_name),
     # )
 
-    agent_id = data["owner"]["id"]
+    try: agent_id = data["owner"]["id"]
+    except: agent_id = None
+    
     # agent_name = data["owner"]["businessName"]
     # agent_team = data["ownerTeam"]
     # agent = Agent(
