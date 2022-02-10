@@ -112,7 +112,7 @@ async def create_update_appointment(request: Request, response: Response,
         ploadOrg = payload.organization(organization)
         crudOrg.createOrganization(db, ploadOrg)
     
-    dbTicket = crudTicket.readTicketById(ticketID)
+    dbTicket = crudTicket.readTicketById(db, ticketID)
     if not dbTicket:
         ploadTicket = payload.Ticket(ticket)
         crudTicket.createTicket(db, ploadTicket)
