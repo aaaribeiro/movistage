@@ -31,15 +31,15 @@ router = APIRouter()
 )
 async def create_update_ticket(request: Request, response: Response,
                                 db: Session=Depends(get_db)):
-    response = await request.json()
+    resp = await request.json()
     
-    ticket = movidesk.get_ticket(response["Id"])
+    ticket = movidesk.get_ticket(resp["Id"])
     ploadTicket = payload.ticket(ticket)
 
     organization = movidesk.get_organization(ploadTicket.organization_id)
     ploadOrg = payload.organization(organization)
     
-    appointments = [f"{response['Id']}{x['Id']}" for x in response["Actions"]]
+    appointments = [f"{response['Id']}{x['Id']}" for x in resp["Actions"]]
     print(appointments)
 
     crudTicket, crudOrg = CRUDTicket(), CRUDOrganization()
