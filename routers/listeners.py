@@ -93,16 +93,30 @@ async def delete_ticket(request: Request, db: Session=Depends(get_db)):
 async def create_update_appointment(request: Request, response: Response,
                                 db: Session=Depends(get_db)):
 
+    # handle webhook response
     resp = await request.json()
     ticketID = resp["Id"]
     actionID = resp["Actions"][0]["Id"]
 
-    # crud objects
+    # define crud objects
+    crudTicket = CRUDTicket()
+    crudOrg = CRUDOrganization()
     crudAppointment = CRUDTimeAppointment()
     
-    # ticket/payload movidesk
+    # get data from movidesk api
     ticket = movidesk.get_ticket(resp["Id"])
+        
+    dbOrganization = crudOrg.readOrganizationById(db, ticket["owner"]["id"])
+    if not dbOrganization:
+        organization = movidesk.get_organization(ticket["owner"]["id"])
+        ploadOrg = payload.organization(organization)
+        crudOrg.createOrganization(db, ploadOrg)
     
+    dbTicket = crudTicket.readTicketById(ticketID)
+    if not dbTicket:
+        ploadTicket = payload.Ticket(ticket)
+        crudTicket.createTicket(db, ploadTicket)
+
     if resp['Actions'][0]["CreatedBy"]["ProfileType"] in (1, 3):
         appointmentId = int(f"{ticketID}"+f"{actionID:03}")
         dbAppointment = crudAppointment.readTimeAppointmentById(db,
