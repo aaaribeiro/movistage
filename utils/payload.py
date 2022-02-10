@@ -108,7 +108,7 @@ def ticket(data):
 
 def organization(data):
     organization_id  = data["id"]
-    organization_name = data["bussinessName"]
+    organization_name = data["businessName"]
 
     return Organization(
         organization_id = organization_id,
