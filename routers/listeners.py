@@ -41,7 +41,7 @@ async def create_update_ticket(request: Request, response: Response,
     organization = movidesk.get_organization(ploadTicket.organization_id)
     ploadOrg = payload.organization(organization)
     
-    if resp['Actions'][0]["CreatedBy"]["profileType"] in (1, 3):
+    if resp['Actions'][0]["CreatedBy"]["ProfileType"] in (1, 3):
         appointmentId = int(f"{resp['Id']}{resp['Actions'][0]['Id']}")
         dbAppointment = crudAppointment.readTimeAppointmentById(db,
                                                                 appointmentId)
