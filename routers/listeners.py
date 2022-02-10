@@ -43,7 +43,8 @@ async def create_update_ticket(request: Request, response: Response,
     
     if resp['Actions'][0]["CreatedBy"]["profileType"] in (1, 3):
         appointmentId = int(f"{resp['Id']}{resp['Actions'][0]['Id']}")
-        dbAppointment = crudAppointment.readTimeAppointmentById(db, appointmentId)
+        dbAppointment = crudAppointment.readTimeAppointmentById(db,
+                                                                appointmentId)
         if not dbAppointment:
             print("this function must create a new appointment in db")
     
