@@ -123,5 +123,5 @@ async def create_update_appointment(request: Request, response: Response,
             crudAppointment.createTimeAppointment(db, ploadAppointment)
             response.status_code = status.HTTP_201_CREATED
         else:
-            crudAppointment.updateAppointment(db, ploadAppointment,
-                                                dbAppointment)
+            crudAppointment.updateTimeAppointment(db, ploadAppointment,
+                                                    dbAppointment)
