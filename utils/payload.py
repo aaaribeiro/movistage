@@ -74,8 +74,8 @@ def ticket(data):
     urgency = _upper(data["urgency"])
     created_date = _upper(data["createdDate"])
     status = _upper(data["status"])
-    sla_first_response = _time(data["slaResponseDate"])
-    sla_solution_date = _time(data["slaSolutionDate"])
+    sla_first_response = data["slaResponseDate"]
+    sla_solution_date = data["slaSolutionDate"]
     ticket = Ticket(
         ticket_id = ticket_id,
         agent_id = agent_id,
