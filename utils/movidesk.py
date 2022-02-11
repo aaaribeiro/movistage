@@ -19,7 +19,7 @@ TOKEN = "27d95ace-819c-43d8-bb93-5c39dbf5edbd"
 ###################################################################
 
 # @utils.debug
-def get_ticket(id, url=URL, token=TOKEN):
+def get_ticket(id: int, url: str=URL, token: str=TOKEN):
     params = {"token": token, "id": {id}}
     try:
         ticket = requests.get(f"{url}/tickets", params=params)
@@ -30,9 +30,28 @@ def get_ticket(id, url=URL, token=TOKEN):
         # endpoint = err.response.url
         # message = "Ticket not found"
         # logger.error(f"{error_code} {message} {endpoint}")
-        print("ticket not found - movidesk")
+        print("movidesk ticket not found")
         exit(1)
     else:
         return ticket.json()
 
+
+def get_organization(id: str, url: str=URL, token: str=TOKEN):
+    params = {"token": token, "id": {id}}
+    try:
+        organization = requests.get(f"{url}/persons", params=params)
+        # logger.debug(f"{ticket.url}")
+        organization.raise_for_status()
+    except requests.HTTPError as err:
+        # error_code = err.response.status_code
+        # endpoint = err.response.url
+        # message = "Ticket not found"
+        # logger.error(f"{error_code} {message} {endpoint}")
+        print("movidesk organization not found")
+        exit(1)
+    else:
+        return organization.json()
+
+
+# Class
 

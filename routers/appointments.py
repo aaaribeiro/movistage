@@ -1,25 +1,25 @@
-# # imports from third-party libraries
-# import time
-# from typing import List
-# from fastapi import Depends, APIRouter, HTTPException, status
-# from sqlalchemy.orm import Session
+# imports from third-party libraries
+import time
+from typing import List
+from fastapi import Depends, APIRouter, HTTPException, status
+from sqlalchemy.orm import Session
 
-# # required imports from models package
-# # from models import _crud
-# from models.crud import CRUDAgent, CRUDTicket, CRUDTimeAppointment 
-# from serializers import schemas
+# required imports from models package
+# from models import _crud
+from models.crud import CRUDTimeAppointment 
+from serializers import schemas
 
-# # required imports from utils package
-# from utils.handlers import get_db
+# required imports from utils package
+from utils.handlers import get_db
 
-# # authentication
-# from auth import auth
+# authentication
+from auth import auth
 
-# # constants
-# # it will be used in swagger documentation to organize the endpoints
-# TAGS = ["time appointments",]
+# constants
+# it will be used in swagger documentation to organize the endpoints
+TAGS = ["appointments",]
 
-# router = APIRouter()
+router = APIRouter()
 
 
 # @router.get(
