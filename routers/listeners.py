@@ -66,15 +66,15 @@ async def create_update_ticket(request: Request, response: Response,
 )
 async def delete_ticket(request: Request, db: Session=Depends(get_db)):
     response = await request.json()
-    ticketId = response["Id"]
+    ticketID = response["Id"]
 
     crudTicket, crudAppointment = CRUDTicket(), CRUDTimeAppointment()
-    dbTicket = crudTicket.readTicketById(db, ticketId)
+    dbTicket = crudTicket.readTicketById(db, ticketID)
     if not dbTicket:
         raise HTTPException(status_code=404, detail="ticket not found")
     else:
-        crudAppointment.deleteTimeAppointmentsByTicketId(db, ticketId)
-        crudTicket.deleteTicket(db, ticketId)
+        crudAppointment.deleteTimeAppointmentsByTicketId(db, ticketID)
+        crudTicket.deleteTicket(db, ticketID)
 
 
 
