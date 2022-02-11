@@ -114,11 +114,14 @@ async def create_update_appointment(request: Request, response: Response,
     if not dbTicket:        
         crudTicket.createTicket(db, ploadTicket)
 
+    ploadAppointment = payload.appointment(ticket, actionID)
     if resp['Actions'][0]["CreatedBy"]["ProfileType"] in (1, 3):
         appointmentId = int(f"{ticketID}"+f"{actionID:03}")
         dbAppointment = crudAppointment.readTimeAppointmentById(db,
                                                                 appointmentId)
         if not dbAppointment:
-            ploadTicket = payload.appointment(ticket, actionID)
-            crudAppointment.createTimeAppointment(db, ploadTicket)
+            crudAppointment.createTimeAppointment(db, ploadAppointment)
             response.status_code = status.HTTP_201_CREATED
+        else:
+            crudAppointment.updateAppointment(db, ploadAppointment,
+                                                dbAppointment)

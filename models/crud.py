@@ -149,6 +149,15 @@ class CRUDTimeAppointment:
         db.commit()
 
 
+    def updateTimeAppointment(self, db: Session, payload: schemas.TimeAppointment,
+                    dbAppointment: models.TimeAppointments):
+        dbAppointment.ticket_id = payload.ticket_id
+        dbAppointment.agent_id = payload.agent_id
+        dbAppointment.created_date = payload.created_date
+        dbAppointment.time_appointment = payload.time_appointment
+        db.commit()
+
+
     def deleteTimeAppointmentsByTicketId(self, db: Session, id: int):
         dbAppointments = self.readTimeAppointmentsByTicketId(db, id)
         for dbAppointment in dbAppointments:
