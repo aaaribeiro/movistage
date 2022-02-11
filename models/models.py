@@ -36,11 +36,7 @@ class Organizations(Base):
 
     __tablename__ = "mov_organizations"
     organization_id = Column(String, primary_key=True)
-<<<<<<< HEAD
-    # organization_cc = Column(String, unique=True)
-=======
     # organization_cc = Column(String)
->>>>>>> d66135a25ed013c18f92bbc0ef9e624e5dcc9ab1
     organization_name = Column(String, nullable=False)
     # relationships
     tickets = relationship("Tickets", back_populates="organization")
