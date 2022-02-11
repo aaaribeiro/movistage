@@ -88,6 +88,7 @@ class CRUDOrganization:
         db.commit()
 
 
+
 class CRUDAgent:
 
     def readAgents(self, db: Session, skip: int=0, limit: int=100):
@@ -153,42 +154,6 @@ class CRUDTimeAppointment:
     #     for dbtime in dbtimes:
     #         db.delete(dbtime)
     #     db.commit()
-
-
-# class Crud(CRUDAgent, CRUDOrganization, CRUDTimeAppointment, CRUDTicket):
-
-#     def createUpdateTicket(self, db: Session, payload: schemas.TicketNestedCompany):
-#         # check agent
-#         dbAgent = self.readAgentById(db, payload.agent.agent_id)
-#         if not dbAgent:
-#             self.createAgent(db, payload.agent)
-#         else:
-#             self.updateAgent(db, payload.agent, dbAgent)
-
-#         # check organization
-#         dbOrganization = self.readOrganizationById(db,
-#                                         payload.organization.organization_id)
-#         if not dbOrganization:
-#             self.createOrganization(db, payload.organization)
-#         else:
-#             self.updateOrganization(db, payload.organization, dbOrganization)
-
-#         # check ticket
-#         dbTicket = self.readTicketById(db, payload.ticket_id)
-#         if not dbTicket:
-#             self.createTicket(db, payload)
-#         else:
-#             self.updateTicket(db, payload, dbTicket) 
-
-#         # check each time appointment
-#         for appointment in payload.appointments:
-#             dbTimeAppointment = self.readTimeAppointmentById(db,
-#                                                 appointment.time_appointment_id)
-#             if not dbTimeAppointment:
-#                 self.createTimeAppointment(db, appointment)
-#             else:
-#                 self.updateTimeAppointment(db, appointment, dbTimeAppointment)
-
 
 
 

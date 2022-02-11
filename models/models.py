@@ -15,9 +15,7 @@ from .database import Base
 
 class Tickets(Base):
     
-    # tablename
     __tablename__ = "mov_tickets"
-    # columns
     ticket_id = Column(Integer, primary_key=True)
     organization_id = Column(String, ForeignKey("mov_organizations.organization_id"))
     agent_id = Column(String, ForeignKey("mov_agents.agent_id"))
@@ -37,10 +35,9 @@ class Tickets(Base):
 class Organizations(Base):
 
     __tablename__ = "mov_organizations"
-
     organization_id = Column(String, primary_key=True)
+    # organization_cc = Column(String, unique=True)
     organization_name = Column(String, nullable=False)
-
     # relationships
     tickets = relationship("Tickets", back_populates="organization")
 
@@ -48,7 +45,6 @@ class Organizations(Base):
 class Agents(Base):
 
     __tablename__ = "mov_agents"
-
     agent_id = Column(String, primary_key=True)
     agent_name = Column(String)
     agent_team = Column(String)
@@ -60,7 +56,6 @@ class Agents(Base):
 class TimeAppointments(Base):
 
     __tablename__ = "mov_times"
-
     time_appointment_id = Column(Integer, primary_key=True)
     ticket_id = Column(Integer, ForeignKey("mov_tickets.ticket_id"), nullable=False)
     agent_id = Column(String, ForeignKey("mov_agents.agent_id"), nullable=False)
@@ -74,7 +69,6 @@ class TimeAppointments(Base):
 class WebhookLogs(Base):
 
     __tablename__ = "webhook_log"
-
     hook_id = Column(Integer, primary_key=True, autoincrement=True)
     ticket_id = Column(Integer, nullable=False)
     change = Column(String, nullable=False)
@@ -85,15 +79,12 @@ class WebhookLogs(Base):
 class Users(Base):
 
     __tablename__ = "auth_users"
-
     # TYPES = [u'admin', u'edit', u'read']
-
     user_id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
     name = Column(String, nullable=False)
     email = Column(EmailType, nullable=False, unique=True)
     isadmin = Column(Boolean, nullable=False, default=False)
     password = Column(PasswordType(schemes=['pbkdf2_sha512']))
-    
     # relationships
     token = relationship("AccessToken", backref=backref("auth_access_token", uselist=False))
 
@@ -101,7 +92,6 @@ class Users(Base):
 class AccessToken(Base):
 
     __tablename__ = "auth_access_token"
-
     token_id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
     user_id = Column(Integer, ForeignKey("auth_users.user_id"), nullable=False)
     access_token = Column(String, nullable=False)
