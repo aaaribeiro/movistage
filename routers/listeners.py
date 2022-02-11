@@ -100,7 +100,7 @@ async def create_update_appointment(request: Request, response: Response,
     
     # get data from movidesk api
     ticket = movidesk.get_ticket(resp["Id"])
-    ploadTicket, ploadOrg, ploadAgent = payload.Ticket(ticket)
+    ploadTicket, ploadOrg, ploadAgent = payload.ticket(ticket)
         
     dbOrganization = crudOrg.readOrganizationById(db, ploadOrg.organization_id)
     if not dbOrganization:
