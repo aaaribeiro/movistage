@@ -100,7 +100,7 @@ async def create_update_appointment(request: Request, response: Response,
     ticket = movidesk.get_ticket(resp["Id"])
     organization = movidesk.get_organization(ticket["clients"][0]["organization"]["id"])
         
-    dbOrganization = crudOrg.readOrganizationById(db, ticket["owner"]["id"])
+    dbOrganization = crudOrg.readOrganizationById(db, organization["id"])
     if not dbOrganization:
         ploadOrg = payload.organization(organization)
         crudOrg.createOrganization(db, ploadOrg)
