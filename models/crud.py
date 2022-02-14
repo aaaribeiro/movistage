@@ -125,6 +125,11 @@ class CRUDAgent:
 
 class CRUDTimeAppointment:
 
+    def readTimeAppointments(self, db: Session, skip: int=0, limit: int=100):
+        return db.query(models.TimeAppointments).\
+            offset(skip).limit(limit).all()
+
+
     def readTimeAppointmentById(self, db:Session, id: int):
         return db.query(models.TimeAppointments).get(id)
 
@@ -148,6 +153,15 @@ class CRUDTimeAppointment:
         db.commit()
 
 
+    def updateTimeAppointment(self, db: Session, payload: schemas.TimeAppointment, 
+                                dbAppointment: models.TimeAppointments):
+        dbAppointment.agent_id = payload.agent_id
+        dbAppointment.ticket_id = payload.ticket_id
+        dbAppointment.time_appointment = payload.time_appointment
+        dbAppointment.created_date = payload.created_date
+        db.commit()
+                
+
     def deleteTimeAppointmentsByTicketId(self, db: Session, id: int):
         dbAppointments = self.readTimeAppointmentsByTicketId(db, id)
         for dbAppointment in dbAppointments:
@@ -155,7 +169,7 @@ class CRUDTimeAppointment:
         db.commit()
     
 
-    def deleteTimeAppointmentById(self, db: Session, id: int):
+    def deleteTimeAppointment(self, db: Session, id: int):
         dbAppointment = self.readTimeAppointmentById(db, id)
         db.delete(dbAppointment)
         db.commit()

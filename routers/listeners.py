@@ -137,4 +137,4 @@ async def delete_appointments(request: Request, db: Session=Depends(get_db)):
     if not dbAppointment:
         raise HTTPException(status_code=404, detail="appointment not found")
     else:
-        crudAppointment.deleteTimeAppointmentById(db, appointmentID)
+        crudAppointment.deleteTimeAppointment(db, appointmentID)
