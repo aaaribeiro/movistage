@@ -31,44 +31,11 @@ def _time(value):
 def ticket(data):
 
     organization_id = data["clients"][0]["organization"]["id"]
-    # organization_name = data["clients"][0]["organization"]["businessName"]
-    # organization = Organization(
-    #     organization_id = _upper(organization_id),
-    #     organization_name =  _upper(organization_name),
-    # )
 
-    try: agent_id = data["owner"]["id"]
-    except: agent_id = None
-    
-    # agent_name = data["owner"]["businessName"]
-    # agent_team = data["ownerTeam"]
-    # agent = Agent(
-    #     agent_id = _upper(agent_id),
-    #     agent_name = _upper(agent_name),
-    #     agent_team = _upper(agent_team),
-    # )
-
-    # appointments = [] 
-    # for action in data["actions"][::-1]:
-    #     if action["createdBy"]["profileType"] in (1, 3):
-    #         try:
-    #             time_appointment_id = int(f"{data['id']}"
-    #                                     + f"{action['id']:03}")
-    #             ticket_id = data["id"]
-    #             agent_id = action["timeAppointments"][0]["createdBy"]["id"]
-    #             time_appointment = action["timeAppointments"][0]["workTime"]
-    #             created_date = action["createdDate"]
-                
-    #             appointment = TimeAppointment(
-    #                 time_appointment_id = time_appointment_id,
-    #                 ticket_id = ticket_id,
-    #                 agent_id = _upper(agent_id),
-    #                 time_appointment = _time(time_appointment),
-    #                 created_date = created_date,
-    #             )
-    #             appointments.append(appointment)
-    #         except IndexError:
-    #             continue
+    try: 
+        agent_id = data["owner"]["id"]
+    except:
+        agent_id = None
 
     ticket_id = data["id"]
     subject = data["subject"]

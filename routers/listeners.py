@@ -5,7 +5,7 @@ from fastapi import HTTPException, Depends, APIRouter, Request, Response, status
 from sqlalchemy.orm import Session
 
 # required imports from package models
-from models.crud import CRUDOrganization, CRUDTicket, CRUDTimeAppointment
+from models.crud import CRUDAgent, CRUDOrganization, CRUDTicket, CRUDTimeAppointment
 # from models.models import WebhookLogs 
 from serializers import schemas
 
@@ -34,19 +34,20 @@ async def create_update_ticket(request: Request, response: Response,
     resp = await request.json()
     # crud objects
     crudTicket = CRUDTicket()
+    crudAgent = CRUDAgent()
     crudOrg = CRUDOrganization()
-    # crudAppointment = CRUDTimeAppointment()
     
     # ticket/payload movidesk
     ticket = movidesk.get_ticket(resp["Id"])
-    ploadTicket = payload.ticket(ticket)
-   # organization/paylod movidesk
-    organization = movidesk.get_organization(ploadTicket.organization_id)
-    ploadOrg = payload.organization(organization)
-        
+    ploadTicket, ploadOrg, ploadAgent = payload.ticket(ticket)
+
     dbOrg = crudOrg.readOrganizationById(db, ploadOrg.organization_id)
     if not dbOrg:
         crudOrg.createOrganization(db, ploadOrg)
+
+    dbAgent = crudAgent.readAgentById(db, ploadAgent.agent_id)
+    if not dbAgent:
+        crudAgent.createAgent(db, ploadAgent)
 
     dbticket = crudTicket.readTicketById(db, ploadTicket.ticket_id)
     if not dbticket:
@@ -94,20 +95,23 @@ async def create_update_appointment(request: Request, response: Response,
     # define crud objects
     crudTicket = CRUDTicket()
     crudOrg = CRUDOrganization()
+    crudAgent = CRUDAgent()
     crudAppointment = CRUDTimeAppointment()
     
     # get data from movidesk api
     ticket = movidesk.get_ticket(resp["Id"])
-    organization = movidesk.get_organization(ticket["clients"][0]["organization"]["id"])
+    ploadTicket, ploadOrg, ploadAgent = payload.ticket(ticket)
         
-    dbOrganization = crudOrg.readOrganizationById(db, organization["id"])
+    dbOrganization = crudOrg.readOrganizationById(db, ploadOrg.organization_id)
     if not dbOrganization:
-        ploadOrg = payload.organization(organization)
         crudOrg.createOrganization(db, ploadOrg)
     
+    dbAgent = crudAgent.readAgentById(db, ploadAgent.agent_id)
+    if not dbAgent:
+        crudAgent.createAgent(db, ploadAgent)
+    
     dbTicket = crudTicket.readTicketById(db, ticketID)
-    if not dbTicket:
-        ploadTicket = payload.Ticket(ticket)
+    if not dbTicket:        
         crudTicket.createTicket(db, ploadTicket)
 
     if resp['Actions'][0]["CreatedBy"]["ProfileType"] in (1, 3):
