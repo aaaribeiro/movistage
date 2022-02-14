@@ -25,7 +25,7 @@ router = APIRouter()
 @router.get(
     "/appointments",
     tags=TAGS,
-    response_model=List[schemas.TimeAppointmentGroupedByAgent],
+    response_model=List[schemas.TimeAppointment],
     # dependencies=[Depends(auth.api_token)],
 )
 async def read_time_appointments(skip: int = 0, limit: int = 100,
