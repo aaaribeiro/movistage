@@ -27,7 +27,7 @@ router = APIRouter()
 )
 async def read_organizations(skip: int = 0, limit: int = 100,
                             db: Session = Depends(get_db)):
-    crud = CRUDOrganization
+    crud = CRUDOrganization()
     dbOrganizations = crud.readOrganizations(db, skip, limit)
     return dbOrganizations
 
