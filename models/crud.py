@@ -153,6 +153,12 @@ class CRUDTimeAppointment:
         for dbAppointment in dbAppointments:
             db.delete(dbAppointment)
         db.commit()
+    
+
+    def deleteTimeAppointmentById(self, db: Session, id: int):
+        dbAppointment = self.readTimeAppointmentById(db, id)
+        db.delete(dbAppointment)
+        db.commit()
 
 
 # class Crud(CRUDAgent, CRUDOrganization, CRUDTimeAppointment, CRUDTicket):

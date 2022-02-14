@@ -118,3 +118,23 @@ async def create_update_appointment(request: Request, response: Response,
             ploadTicket = payload.appointment(ticket, actionID)
             crudAppointment.createTimeAppointment(db, ploadTicket)
             response.status_code = status.HTTP_201_CREATED
+
+
+@router.post(
+    "/appointments/delete",
+    tags=TAGS,
+    status_code=status.HTTP_204_NO_CONTENT,
+    # dependencies=[Depends(auth.api_token)],
+)
+async def delete_appointments(request: Request, db: Session=Depends(get_db)):
+    resp = await request.json()
+    ticketID = resp["Id"]
+    actionID = resp["Actions"][0]["Id"]
+    appointmentID = int(f"{ticketID}"+f"{actionID:03}")
+
+    crudAppointment = CRUDTimeAppointment()
+    dbAppointment = crudAppointment.readTimeAppointmentById(db, appointmentID)
+    if not dbAppointment:
+        raise HTTPException(status_code=404, detail="appointment not found")
+    else:
+        crudAppointment.deleteTimeAppointmentById(db, appointmentID)
