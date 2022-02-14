@@ -60,7 +60,7 @@ async def create_update_ticket(request: Request, response: Response,
 @router.post(
     "/tickets/delete",
     tags=TAGS,
-    status_code=status.HTTP_204_NO_CONTENT,
+    status_code=status.HTTP_200_OK,
     # dependencies=[Depends(auth.api_token)],
 )
 async def delete_ticket(request: Request, db: Session=Depends(get_db)):
@@ -123,7 +123,7 @@ async def create_update_appointment(request: Request, response: Response,
 @router.post(
     "/appointments/delete",
     tags=TAGS,
-    status_code=status.HTTP_204_NO_CONTENT,
+    status_code=status.HTTP_200_OK,
     # dependencies=[Depends(auth.api_token)],
 )
 async def delete_appointments(request: Request, db: Session=Depends(get_db)):
