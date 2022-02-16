@@ -1,8 +1,8 @@
 # built-in libraries
-from datetime import datetime
+# from datetime import datetime
 
 # imports from third-party libraries
-from typing import List
+# from typing import List
 from fastapi import Depends, APIRouter, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from sqlalchemy.orm import Session
@@ -13,7 +13,7 @@ from serializers import schemas
 
 # required imports from packageutils 
 from utils.handlers import get_db
-from auth import auth
+# from auth import auth
 
 # constants
 # it will be used in swagger documentation to organize the endpoints
