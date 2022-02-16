@@ -175,155 +175,61 @@ class CRUDTimeAppointment:
         db.commit()
 
 
-# class Crud(CRUDAgent, CRUDOrganization, CRUDTimeAppointment, CRUDTicket):
 
-#     def createUpdateTicket(self, db: Session, payload: schemas.TicketNestedCompany):
-#         # check agent
-#         dbAgent = self.readAgentById(db, payload.agent.agent_id)
-#         if not dbAgent:
-#             self.createAgent(db, payload.agent)
-#         else:
-#             self.updateAgent(db, payload.agent, dbAgent)
+class CRUDUser:
 
-#         # check organization
-#         dbOrganization = self.readOrganizationById(db,
-#                                         payload.organization.organization_id)
-#         if not dbOrganization:
-#             self.createOrganization(db, payload.organization)
-#         else:
-#             self.updateOrganization(db, payload.organization, dbOrganization)
-
-#         # check ticket
-#         dbTicket = self.readTicketById(db, payload.ticket_id)
-#         if not dbTicket:
-#             self.createTicket(db, payload)
-#         else:
-#             self.updateTicket(db, payload, dbTicket) 
-
-#         # check each time appointment
-#         for appointment in payload.appointments:
-#             dbTimeAppointment = self.readTimeAppointmentById(db,
-#                                                 appointment.time_appointment_id)
-#             if not dbTimeAppointment:
-#                 self.createTimeAppointment(db, appointment)
-#             else:
-#                 self.updateTimeAppointment(db, appointment, dbTimeAppointment)
+    def readUserByEmail(self, db: Session, email: str):
+        return db.query(models.Users).\
+            filter(models.Users.email==email).\
+            first()
 
 
+    def createUser(self, db: Session, user: schemas.User):
+        dbUser = models.Users(
+            name = user.name,
+            email = user.email,
+            isadmin = user.isadmin,
+            password = user.password,
+        )
+        db.add(dbUser)
+        db.commit()
+        db.refresh(dbUser)
+        return dbUser
 
 
-### WEBHOOK ###
-
-def get_hook_logs(db: Session, read: bool = None,
-                    skip: int = 0, limit: int = 100):
-    if read is not None:
-        return db.query(models.WebhookLogs).\
-            filter(models.WebhookLogs.was_read==read).\
-            order_by(models.WebhookLogs.hook_id).\
-            offset(skip).limit(limit).all()
-            
-    else:
-        return db.query(models.WebhookLogs).\
-            offset(skip).limit(limit).all()
+    def readAccessToken(self, db: Session, user: schemas.CreatedUser):
+        return db.query(models.AccessToken).filter(
+            models.AccessToken.user_id==user.user_id).first()
 
 
-def get_hooks_by_ticket_id(db: Session, ticket_id: int, skip: int = 0,
-    limit: int = 100):
-    return db.query(models.WebhookLogs).\
-        filter(models.WebhookLogs.ticket_id==ticket_id).\
-        offset(skip).limit(limit).all()
+    def createAccessToken(self, db: Session, user: schemas.CreatedUser):
+        dbToken = models.AccessToken(
+            user_id = user.user_id,
+            access_token = uuid.uuid5(uuid.uuid4(), user.email)
+        )
+        db.add(dbToken)
+        db.commit()
+        db.refresh(dbToken)
+        return dbToken
 
 
-def get_hook_log_by_ticket_id(db: Session, ticket_id: int):
-    return db.query(models.WebhookLogs).filter(
-        models.WebhookLogs.ticket_id==ticket_id).first()
+    def authenticate_user(self, db: Session, user: str, password: str):
+        user = self.readUserByEmail(db, email=user)
+        if not user:
+            return
+        if password != user.password:
+            return
+        return user
 
 
-def create_hook(db: Session, webhook: schemas.WebhookLog):
-    db_webhook = models.WebhookLogs(
-        ticket_id = webhook.ticket_id,
-        change = webhook.change,
-        trigger_date = webhook.trigger_date,
-    )
-    db.add(db_webhook)
-    db.commit()
-    # db.refresh(db_webhook)
-    # return True
+    def readUserByToken(self, db: Session, token: str):
+        return db.query(models.AccessToken.access_token, models.Users.email,
+                        models.Users.isadmin).\
+                join(models.Users).\
+                filter(models.AccessToken.access_token==token).\
+                first()
 
 
-## USER
-
-def get_user_by_email(db: Session, email: str):
-    return db.query(models.Users).filter(
-        models.Users.email==email).first()
-
-
-def register_user(db: Session, user: schemas.User):
-    db_user = models.Users(
-        # id = webhook.ticket_id,
-        name = user.name,
-        email = user.email,
-        isadmin = user.isadmin,
-        password = user.password,
-    )
-    db.add(db_user)
-    db.commit()
-    db.refresh(db_user)
-    return db_user
-
-
-def get_access_token(db: Session, user: schemas.CreatedUser):
-    return db.query(models.AccessToken).filter(
-        models.AccessToken.user_id==user.user_id).first()
-
-
-def create_access_token(db: Session, user: schemas.CreatedUser):
-    db_token = models.AccessToken(
-        user_id = user.user_id,
-        access_token = uuid.uuid5(uuid.uuid4(), user.email)
-    )
-    db.add(db_token)
-    db.commit()
-    db.refresh(db_token)
-    return db_token
-
-
-def authenticate_user(db: Session, user: str, password: str):
-    user = get_user_by_email(db, email=user)
-    if not user:
-        return
-    if password != user.password:
-        return
-    return user
-
-
-def get_user_by_token(db: Session, token: str):
-    return db.query(models.AccessToken.access_token,
-                    models.Users.email,
-                    models.Users.isadmin).\
-            join(models.Users).filter(
-        models.AccessToken.access_token==token).first()
-
-
-
-def get_token_by_user_id(db: Session, id: int):
-    return db.query(models.AccessToken).filter(
-        models.AccessToken.user_id == id).first()
-
-
-def get_hook_by_id(db: Session, id: int):
-    return db.query(models.WebhookLogs).filter(
-        models.WebhookLogs.hook_id==id).first()
-
-
-def partial_update_hook(db: Session, id: str, 
-                        hook: schemas.WebhookLog):
-    db.query(models.WebhookLogs).filter(
-        models.WebhookLogs.hook_id==id).update(
-        hook.dict(exclude_unset=True))        
-    db.commit()
-    # db_hook_updated = get_hook_by_id(
-    #     db,
-    #     id=id
-    # )
-    # return db_hook_updated
+    def readTokenByUserId(self, db: Session, id: int):
+        return db.query(models.AccessToken).filter(
+            models.AccessToken.user_id == id).first()
