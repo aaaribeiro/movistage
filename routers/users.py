@@ -3,43 +3,39 @@
 
 # imports from third-party libraries
 # from typing import List
-# from fastapi import Depends, APIRouter, HTTPException, status
-# from fastapi.security import OAuth2PasswordRequestForm
-# from sqlalchemy.orm import Session
+from fastapi import Depends, APIRouter, HTTPException, status
+from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
+from sqlalchemy.orm import Session
 
 # required imports from package models
-# from models import crud 
-# from serializers import schemas
+from models.crud import CRUDUser 
+from serializers import schemas
 
 # required imports from packageutils 
-# from utils.handlers import get_db
+from utils.handlers import get_db
 # from auth import auth
 
 # constants
 # it will be used in swagger documentation to organize the endpoints
-# TAGS = ["Authentication",]
+TAGS = ["users",]
 
-# router = APIRouter()
+router = APIRouter()
 
-# @router.post(
-#     "/user",
-#     tags=TAGS,
-#     response_model=schemas.CreatedUser
-# )
-# async def register_user(user: schemas.User, token:str=None,
-#                             db: Session=Depends(get_db)):
-#     """
-#     Create an user in movidesk stage
-#     """
-
-#     auth.admin_authorization(db, token)
-#     db_user = crud.get_user_by_email(db, email=user.email)
-#     if db_user:
-#         raise HTTPException(
-#             status_code=400,
-#             detail="User already registered"
-#         )
-#     return crud.register_user(db=db, user=user)
+@router.post(
+    "/token",
+    tags=TAGS,
+    response_model=schemas.CreatedUser
+)
+async def login(formData: OAuth2PasswordRequestForm=Depends(),
+                            db: Session=Depends(get_db)):
+    dbUser = CRUDUser.readUserByEmail(db, formData.username)
+    if not dbUser:
+        raise HTTPException(status_code=400,
+                            detail="incorrect username or password")
+    if dbUser.password != formData.password:
+        raise HTTPException(status_code=400,
+                            detail="incorrect username or password")
+    return dbUser
 
 
 # @router.post(

@@ -25,7 +25,7 @@ def _upper(value):
 def _time(value):
     if value is None: return "00:00:00"
     else: return value
-
+    
 
 
 def ticket(data):
@@ -92,11 +92,17 @@ def ticket(data):
     return ticket, organization, agent 
 
 
-
 # def organization(data):
 #     organization_id  = data["id"]
 #     organization_name = data["businessName"]
 
+<<<<<<< HEAD
+# def organization(data):
+#     organization_id  = data["id"]
+#     organization_name = data["businessName"]
+
+=======
+>>>>>>> dde6cd4f59602db4f8c421fc2a41567aa2450c87
 #     return Organization(
 #         organization_id = organization_id,
 #         organization_name = _upper(organization_name)

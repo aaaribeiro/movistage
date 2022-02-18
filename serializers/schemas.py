@@ -41,7 +41,7 @@ class Organization(BaseModel):
         orm_mode = True
 
 
-
+################################ ?
 class TicketAppointment(BaseModel):
     time_appointment_id: Optional[int]
     time_appointment: Optional[time]
@@ -81,43 +81,43 @@ class TicketNestedCompany(BaseModel):
 
 
 
-class AgentAppointment(BaseModel):
-    time_appointment_id: Optional[int]
-    agent: Optional[Agent] = None
-    time_appointment: Optional[time]
-    created_date: Optional[datetime]
+# class AgentAppointment(BaseModel):
+#     time_appointment_id: Optional[int]
+#     agent: Optional[Agent] = None
+#     time_appointment: Optional[time]
+#     created_date: Optional[datetime]
 
-    class Config:
-        orm_mode = True
-
-
-class TimeAppointmentGroupedByTicket(BaseModel):
-    ticket_id: Optional[int]
-    time_appointments: List[AgentAppointment] = None
-
-    class Config:
-        orm_mode = True
+#     class Config:
+#         orm_mode = True
 
 
-class TimeAppointmentGroupedByAgent(BaseModel):
-    agent_id: Optional[str]
-    agent_name: Optional[str]
-    agent_team: Optional[str]
-    time_appointments: List[TicketAppointment] = None
+# class TimeAppointmentGroupedByTicket(BaseModel):
+#     ticket_id: Optional[int]
+#     time_appointments: List[AgentAppointment] = None
 
-    class Config:
-        orm_mode = True
+#     class Config:
+#         orm_mode = True
 
 
-class WebhookLog(BaseModel):
-    hook_id: Optional[int]
-    ticket_id: Optional[int]
-    change: Optional[str]
-    trigger_date: Optional[datetime]
-    was_read: Optional[bool]
+# class TimeAppointmentGroupedByAgent(BaseModel):
+#     agent_id: Optional[str]
+#     agent_name: Optional[str]
+#     agent_team: Optional[str]
+#     time_appointments: List[TicketAppointment] = None
 
-    class Config:
-        orm_mode = True
+#     class Config:
+#         orm_mode = True
+
+
+# class WebhookLog(BaseModel):
+#     hook_id: Optional[int]
+#     ticket_id: Optional[int]
+#     change: Optional[str]
+#     trigger_date: Optional[datetime]
+#     was_read: Optional[bool]
+
+#     class Config:
+#         orm_mode = True
 
 
 class User(BaseModel):

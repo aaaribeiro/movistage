@@ -62,8 +62,9 @@ def startup_event():
 app.include_router(tickets.router, prefix=PREFIX)
 app.include_router(organizations.router, prefix=PREFIX)
 app.include_router(agents.router, prefix=PREFIX)
+app.include_router(appointments.router, prefix=PREFIX)
 app.include_router(listeners.router, prefix=PREFIX)
-# app.include_router(users.router, prefix=PREFIX)
+app.include_router(users.router, prefix=PREFIX)
 
 
 

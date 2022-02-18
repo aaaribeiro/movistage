@@ -22,57 +22,62 @@ TAGS = ["appointments",]
 router = APIRouter()
 
 
-# @router.get(
-#     "/timeappointments",
-#     tags=TAGS,
-#     response_model=List[schemas.TimeAppointmentGroupedByAgent],
-#     # dependencies=[Depends(auth.api_token)],
-# )
-# def read_time_appointments_by_agent(skip: int = 0, limit: int = 100,
-#                         db: Session = Depends(get_db)):
-
-#     crud = CRUDAgent()
-#     return crud.read_agents(db, skip=skip, limit=limit)
-
-
-# @router.post(
-#     "/timeappointments",
-#     tags=TAGS,
-#     status_code=status.HTTP_201_CREATED, 
-#     # dependencies=[Depends(auth.api_token)],
-# )
-# async def create_time_appointment(payload: schemas.TimeAppointment,
-#                                 db: Session=Depends(get_db)):
-#     """
-#     Write something
-#     """
-
-#     # ticket_crud = CRUDTicket()
-#     # ticket_payload = 
-    
-#     crud = CRUDTimeAppointment()
-#     # raise an error HTTP_400 if time already registered
-#     time = crud.read_time_appointment_by_id(payload.time_appointment_id)
-#     if time:
-#         raise HTTPException(status_code=400, detail="time already registered")
-        
-#     crud.create_time_appointment(db, payload)
+@router.get(
+    "/appointments",
+    tags=TAGS,
+    response_model=List[schemas.TimeAppointment],
+    # dependencies=[Depends(auth.api_token)],
+)
+async def read_time_appointments(skip: int = 0, limit: int = 100,
+                        db: Session = Depends(get_db)):
+    crud = CRUDTimeAppointment()
+    return crud.readTimeAppointments(db, skip=skip, limit=limit)
 
 
-# @router.put(
-#     "/timeappointments/{timeappointment_id}",
-#     tags=TAGS,
-#     status_code=status.HTTP_204_NO_CONTENT,
-#     dependencies=[Depends(auth.api_token)],
-# )
-# async def update_time_appointment(timeappointment_id: int, 
-#                                 payload: schemas.TimeAppointment, 
-#                                 db: Session = Depends(get_db)):
 
-#     crud = CRUDTimeAppointment()
-#     # read ticket from database and create a new one if not exists
-#     times = crud.read_time_appointment_by_id(db, timeappointment_id)
-#     if times:
-#         crud.update_time_appointment(db, payload, times)  
-#     else:
-#         crud.create_time_appointment(db, payload)
+@router.post(
+    "/appointments",
+    tags=TAGS,
+    status_code=status.HTTP_201_CREATED, 
+    # dependencies=[Depends(auth.api_token)],
+)
+async def create_time_appointment(payload: schemas.TimeAppointment,
+                                db: Session=Depends(get_db)):    
+    crud = CRUDTimeAppointment()
+    dbAppointment = crud.readTimeAppointmentById(payload.time_appointment_id)
+    if dbAppointment:
+        raise HTTPException(status_code=400,
+                            detail="appointment already registered")
+    crud.createTimeAppointment(db, payload)
+
+
+
+@router.put(
+    "/appointments/{id}",
+    tags=TAGS,
+    status_code=status.HTTP_204_NO_CONTENT,
+    # dependencies=[Depends(auth.api_token)],
+)
+async def update_time_appointment(id: int, payload: schemas.TimeAppointment, 
+                                db: Session = Depends(get_db)):
+    crud = CRUDTimeAppointment()
+    dbAppointment = crud.readTimeAppointmentById(db, id)
+    if dbAppointment:
+        crud.update(db, payload, dbAppointment)  
+    else:
+        crud.createTimeAppointment(db, payload)
+
+
+
+@router.delete(
+    "/appointments/{id}",
+    tags=TAGS,
+    status_code=status.HTTP_204_NO_CONTENT,
+    # dependencies=[Depends(auth.api_token)],
+)
+async def delete_appointments(id: int, db: Session = Depends(get_db)):
+    crud = CRUDTimeAppointment()
+    dbAppointment = crud.readTimeAppointmentById(db, id)
+    if not dbAppointment:
+        raise HTTPException(status_code=404, detail="appointment not found")
+    crud.deleteTimeAppointment(db, id)
