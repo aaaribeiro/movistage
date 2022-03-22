@@ -1,19 +1,11 @@
-# built-in libraries
-# import logging # libvrary for logging
-# import logging.config
-# from os import urandom # logging config file
 
-# personal modules
-# import utils
-# from venv import create
-from serializers.schemas import Ticket, Agent, Organization, TimeAppointment
-# # @utils.debug
-# def company(data):
-#     return {
-#         "client_id": data["clients"][0]["organization"]["id"],
-#         "organization_name": data["clients"][0]\
-#                             ["organization"]["businessName"].upper(),
-#         }
+from serializers.schemas import (
+    Ticket,
+    Agent,
+    Organization,
+    TimeAppointment,
+)
+
 
 
 def _upper(value):
@@ -37,9 +29,15 @@ def ticket(data):
         organization_name =  _upper(organization_name),
     )
 
-    agent_id = _upper(data["owner"]["id"])
-    agent_name = _upper(data["owner"]["businessName"])
-    agent_team = _upper(data["ownerTeam"])
+    try:
+        agent_id = _upper(data["owner"]["id"])
+        agent_name = _upper(data["owner"]["businessName"])
+        agent_team = _upper(data["ownerTeam"])
+    except:
+        agent_id = None
+        agent_name = None
+        agent_team = None  
+    
     agent = Agent(
         agent_id = agent_id,
         agent_name = agent_name,
