@@ -5,7 +5,11 @@ from fastapi import HTTPException, Depends, APIRouter, Request, Response, status
 from sqlalchemy.orm import Session
 
 # required imports from package models
+<<<<<<< HEAD
+from models.crud import CRUDOrganization, CRUDTicket, CRUDTimeAppointment, CRUDAgent
+=======
 from models.crud import CRUDAgent, CRUDOrganization, CRUDTicket, CRUDTimeAppointment
+>>>>>>> dde6cd4f59602db4f8c421fc2a41567aa2450c87
 # from models.models import WebhookLogs 
 from serializers import schemas
 
@@ -114,11 +118,19 @@ async def create_update_appointment(request: Request, response: Response,
     if not dbTicket:        
         crudTicket.createTicket(db, ploadTicket)
 
+    ploadAppointment = payload.appointment(ticket, actionID)
     if resp['Actions'][0]["CreatedBy"]["ProfileType"] in (1, 3):
         appointmentID = int(f"{ticketID}"+f"{actionID:03}")
         dbAppointment = crudAppointment.readTimeAppointmentById(db,
                                                                 appointmentID)
         if not dbAppointment:
+<<<<<<< HEAD
+            crudAppointment.createTimeAppointment(db, ploadAppointment)
+            response.status_code = status.HTTP_201_CREATED
+        else:
+            crudAppointment.updateTimeAppointment(db, ploadAppointment,
+                                                    dbAppointment)
+=======
             ploadTicket = payload.appointment(ticket, actionID)
             crudAppointment.createTimeAppointment(db, ploadTicket)
             response.status_code = status.HTTP_201_CREATED
@@ -142,3 +154,4 @@ async def delete_appointments(request: Request, db: Session=Depends(get_db)):
         raise HTTPException(status_code=404, detail="appointment not found")
     else:
         crudAppointment.deleteTimeAppointment(db, appointmentID)
+>>>>>>> dde6cd4f59602db4f8c421fc2a41567aa2450c87

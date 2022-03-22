@@ -53,4 +53,5 @@ def get_organization(id: str, url: str=URL, token: str=TOKEN):
         return organization.json()
 
 
+# Class
 
