@@ -12,8 +12,8 @@ class CRUDTicket:
     
     def readTickets(self, db: Session, skip: int=0, limit: int=100):
         return db.query(models.Tickets).\
-            order_by(models.Tickets.ticket_id).all().\
-            offset(skip).limit(limit)
+            order_by(models.Tickets.ticket_id).all()
+
     
 
     def readTicketById(self, db: Session, id: int):
