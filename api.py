@@ -20,7 +20,7 @@ from models.database import engine
 ################## constants ####################
 DESCRIPTION = """
 """
-# PREFIX = "/stage/movidesk/v1"
+PREFIX = "/stage/movidesk/v1"
 #################################################
 
 app = FastAPI(
@@ -59,7 +59,7 @@ def startup_event():
 def get_root():
     return {"message": "welcome to Stage"}
 
-# app.include_router(tickets.router, prefix=PREFIX)
+app.include_router(tickets.router, prefix=PREFIX)
 # app.include_router(organizations.router, prefix=PREFIX)
 # app.include_router(agents.router, prefix=PREFIX)
 # app.include_router(appointments.router, prefix=PREFIX)
