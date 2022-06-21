@@ -15,12 +15,14 @@ from models.database import engine
 
 # required imports from utils package
 # from routers import agents, appointments, listeners, organizations, tickets, users
+from routers import tickets
 # from auth import auth
 
 ################## constants ####################
 DESCRIPTION = """
 """
 PREFIX = "/stage/movidesk/v1"
+
 #################################################
 
 app = FastAPI(
