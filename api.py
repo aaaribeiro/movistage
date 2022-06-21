@@ -5,8 +5,8 @@ from fastapi import FastAPI #, Depends, HTTPException, status ,Form
 # from fastapi.security import APIKeyHeader
 
 # required imports from models package
-# from models import models
-# from models.database import engine
+from models import models
+from models.database import engine
 # from models import crud
 
 # required imports from package utils 
@@ -38,9 +38,9 @@ app = FastAPI(
 #         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
 
 
-# @app.on_event("startup")
-# def startup_event():
-#     models.Base.metadata.create_all(bind=engine)
+@app.on_event("startup")
+def startup_event():
+    models.Base.metadata.create_all(bind=engine)
 
 
 # @app.get("/test", dependencies=[Depends(auth.api_token)])
