@@ -155,7 +155,6 @@ class CRUDTimeAppointment:
         db.commit()
 
 
-<<<<<<< HEAD
     def updateTimeAppointment(self, db: Session, payload: schemas.TimeAppointment,
                     dbAppointment: models.TimeAppointments):
         dbAppointment.ticket_id = payload.ticket_id
@@ -164,7 +163,6 @@ class CRUDTimeAppointment:
         dbAppointment.time_appointment = payload.time_appointment
         db.commit()
 
-=======
     def updateTimeAppointment(self, db: Session, payload: schemas.TimeAppointment, 
                                 dbAppointment: models.TimeAppointments):
         dbAppointment.agent_id = payload.agent_id
@@ -173,7 +171,6 @@ class CRUDTimeAppointment:
         dbAppointment.created_date = payload.created_date
         db.commit()
                 
->>>>>>> dde6cd4f59602db4f8c421fc2a41567aa2450c87
 
     def deleteTimeAppointmentsByTicketId(self, db: Session, id: int):
         dbAppointments = self.readTimeAppointmentsByTicketId(db, id)
@@ -187,68 +184,6 @@ class CRUDTimeAppointment:
         db.delete(dbAppointment)
         db.commit()
 
-<<<<<<< HEAD
-
-### WEBHOOK ###
-
-def get_hook_logs(db: Session, read: bool = None,
-                    skip: int = 0, limit: int = 100):
-    if read is not None:
-        return db.query(models.WebhookLogs).\
-            filter(models.WebhookLogs.was_read==read).\
-            order_by(models.WebhookLogs.hook_id).\
-            offset(skip).limit(limit).all()
-            
-    else:
-        return db.query(models.WebhookLogs).\
-            offset(skip).limit(limit).all()
-
-
-def get_hooks_by_ticket_id(db: Session, ticket_id: int, skip: int = 0,
-    limit: int = 100):
-    return db.query(models.WebhookLogs).\
-        filter(models.WebhookLogs.ticket_id==ticket_id).\
-        offset(skip).limit(limit).all()
-
-
-def get_hook_log_by_ticket_id(db: Session, ticket_id: int):
-    return db.query(models.WebhookLogs).filter(
-        models.WebhookLogs.ticket_id==ticket_id).first()
-
-
-def create_hook(db: Session, webhook: schemas.WebhookLog):
-    db_webhook = models.WebhookLogs(
-        ticket_id = webhook.ticket_id,
-        change = webhook.change,
-        trigger_date = webhook.trigger_date,
-    )
-    db.add(db_webhook)
-    db.commit()
-    # db.refresh(db_webhook)
-    # return True
-
-
-## USER
-
-def get_user_by_email(db: Session, email: str):
-    return db.query(models.Users).filter(
-        models.Users.email==email).first()
-
-
-def register_user(db: Session, user: schemas.User):
-    db_user = models.Users(
-        # id = webhook.ticket_id,
-        name = user.name,
-        email = user.email,
-        isadmin = user.isadmin,
-        password = user.password,
-    )
-    db.add(db_user)
-    db.commit()
-    db.refresh(db_user)
-    return db_user
-=======
->>>>>>> dde6cd4f59602db4f8c421fc2a41567aa2450c87
 
 
 class CRUDUser:
